@@ -23,3 +23,8 @@ flutter:
 
   assets:
     - assets/images/
+
+  fonts:
+    - family: PixelFont
+      fonts:
+        - asset: assets/fonts/PixelFont.ttf
