@@ -106,9 +106,6 @@ class _PixelButtonState extends State<PixelButton> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
-          transform: _isHovered
-              ? Matrix4.diagonal3Values(1.1, 1.1, 1.1) // Slight scale on hover
-              : Matrix4.identity(),
           decoration: BoxDecoration(
             color: _isHovered ? Colors.green : Colors.yellow,
             border: Border.all(
