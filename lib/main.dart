@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterbird/splash_screen.dart';
 import 'game_logic.dart';
 import 'components/startmenu.dart';
-import 'splash_screen.dart';
+
 
 void main() {
   runApp(const MyApp());

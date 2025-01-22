@@ -25,7 +25,9 @@ class StartMenu extends StatelessWidget {
                 child:Padding(
                   padding: const EdgeInsets.all(20.0),
                     child: Text('Flappy Bird',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
+
                         fontSize: 54,
                         fontFamily: 'PixelFont',
                         color: Colors.white,
