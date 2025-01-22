@@ -1,6 +1,7 @@
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Dodajemy brakujący import
 import 'package:flutterbird/components/bird.dart';
 import 'package:flutterbird/components/score.dart';
 import 'components/background.dart';
@@ -10,9 +11,8 @@ import 'components/pipe_manager.dart';
 import 'constants.dart';
 import 'main.dart';
 import 'components/startmenu.dart';
-class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection {
 
-
+class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
   late Bird bird;
   late Background background;
   late Ground ground;
@@ -42,6 +42,16 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection {
     bird.flap();
   }
 
+  @override
+  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keys) {
+    // Obsługa klawisza spacji
+    if (event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
+      bird.flap(); // Wywołujemy metodę flap() ptaka
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
   int score = 0;
 
   void incrementScore() {
@@ -56,21 +66,21 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection {
     isGameOver = true;
     pauseEngine();
 
-    // Show a custom dialog with animation
+    // Wyświetlenie niestandardowego okna dialogowego
     showDialog(
       context: buildContext!,
-      barrierDismissible: false,  // Prevent dismissing the dialog by tapping outside
+      barrierDismissible: false,
       builder: (context) {
         return AnimatedOpacity(
-          opacity: isGameOver ? 1.0 : 0.0, // Control opacity to create fade-in effect
-          duration: const Duration(milliseconds: 500), // Duration of the fade-in
+          opacity: isGameOver ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 500),
           child: Dialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
             child: Container(
-                child:PixelContainer(child:
-                Column(
+              child: PixelContainer(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
@@ -92,24 +102,28 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    PixelButton(text: 'Restart', onPressed: () {
-                      Navigator.pop(context);
-                      resetGame();
-                    },
+                    PixelButton(
+                      text: 'Restart',
+                      onPressed: () {
+                        Navigator.pop(context);
+                        resetGame();
+                      },
                     ),
                     const SizedBox(height: 10),
-                    PixelButton(text: 'Game Menu', onPressed:(){
-                      Navigator.pop(context);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const MyApp()),
-                      );
-                    },
+                    PixelButton(
+                      text: 'Game Menu',
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const MyApp()),
+                        );
+                      },
                     ),
-                    SizedBox(height: 10,)
+                    const SizedBox(height: 10),
                   ],
                 ),
-                )
+              ),
             ),
           ),
         );
@@ -118,19 +132,14 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection {
   }
 
   void resetGame() {
-    // Make sure the bird's position and velocity are properly reset
     bird.position = Vector2(birdStartX, birdStartY);
     bird.velocity = 0;
 
-    // Reset the score and game-over state
     score = 0;
     isGameOver = false;
 
-    // Remove all pipes from the game
     children.whereType<Pipe>().forEach((pipe) => pipe.removeFromParent());
 
-    // Resume the game engine
     resumeEngine();
   }
 }
-
