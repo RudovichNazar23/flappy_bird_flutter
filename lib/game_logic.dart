@@ -9,6 +9,7 @@ import 'components/pipe.dart';
 import 'components/pipe_manager.dart';
 import 'constants.dart';
 import 'main.dart';
+import 'components/startmenu.dart';
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection {
 
 
@@ -68,76 +69,47 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Color(0xFF264653),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Game Over',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFF9FBF2),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Score: $score',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      color: Color(0xFFE9C46A),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      resetGame();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFFF6B6B), // Set background color here
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                    ),
-                    child: const Text(
-                      'Restart',
-                      style: TextStyle(fontSize: 20,
+                child:PixelContainer(child:
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Game Over',
+                      style: TextStyle(
+                        fontSize: 48,
+                        fontFamily: "PixelFont",
+                        fontWeight: FontWeight.bold,
                         color: Color(0xFFF9FBF2),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
+                    const SizedBox(height: 10),
+                    Text(
+                      'Score: $score',
+                      style: const TextStyle(
+                        fontFamily: 'PixelFont',
+                        fontSize: 32,
+                        color: Color(0xFFE9C46A),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    PixelButton(text: 'Restart', onPressed: () {
+                      Navigator.pop(context);
+                      resetGame();
+                    },
+                    ),
+                    const SizedBox(height: 10),
+                    PixelButton(text: 'Game Menu', onPressed:(){
                       Navigator.pop(context);
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => const MyApp()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF2A9D8F), // Set background color here
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                     ),
-                    child: const Text(
-                      'Game Menu',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color(0xFFF9FBF2),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                    SizedBox(height: 10,)
+                  ],
+                ),
+                )
             ),
           ),
         );
