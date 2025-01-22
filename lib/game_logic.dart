@@ -44,9 +44,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keys) {
-    // Obsługa klawisza spacji
+
     if (event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
-      bird.flap(); // Wywołujemy metodę flap() ptaka
+      bird.flap();
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
@@ -66,7 +66,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     isGameOver = true;
     pauseEngine();
 
-    // Wyświetlenie niestandardowego okna dialogowego
+
     showDialog(
       context: buildContext!,
       barrierDismissible: false,
