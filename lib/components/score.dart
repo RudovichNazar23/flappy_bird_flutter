@@ -22,6 +22,8 @@ class ScoreText extends TextComponent with HasGameRef<FlutterBird> {
     position = Vector2(gameRef.size.x / 2, 50); // Wyśrodkowane nad górą ekranu
   }
 
+
+
   @override
   void update(double dt) {
     super.update(dt); // Pamiętaj o wywołaniu super.update(dt)
