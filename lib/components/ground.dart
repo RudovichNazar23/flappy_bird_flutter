@@ -4,11 +4,11 @@ import 'package:flame/components.dart';
 import 'package:flutterbird/constants.dart';
 import 'package:flutterbird/game_logic.dart';
 
-class Ground extends SpriteComponent with HasGameRef<FlutterBird>, CollisionCallbacks{
+class Ground extends SpriteComponent with HasGameRef<FlutterBird>, CollisionCallbacks {
   Ground() : super();
 
   @override
-  FutureOr<void> onLoad() async{
+  FutureOr<void> onLoad() async {
     size = Vector2(2 * gameRef.size.x, groundHeight);
     position = Vector2(0, gameRef.size.y - groundHeight);
 
@@ -20,8 +20,10 @@ class Ground extends SpriteComponent with HasGameRef<FlutterBird>, CollisionCall
   @override
   void update(double dt) {
     super.update(dt);
-    position.x -= groundSpeed * dt;
-    if(position.x + size.x /2 < 0){
+
+    position.x -= gameRef.groundSpeed * dt;
+
+    if (position.x + size.x / 2 < 0) {
       position.x = 0;
     }
   }
