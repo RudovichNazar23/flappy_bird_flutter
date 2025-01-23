@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-class StartMenu extends StatelessWidget {
+class StartMenu extends StatefulWidget {
   final VoidCallback onPlay;
+  final Function(String) onSetPlayerName;
 
-  const StartMenu({required this.onPlay, Key? key}) : super(key: key);
+  const StartMenu({required this.onPlay, required this.onSetPlayerName, Key? key}) : super(key: key);
+
+  @override
+  _StartMenuState createState() => _StartMenuState();
+}
+
+class _StartMenuState extends State<StartMenu> {
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -13,41 +21,77 @@ class StartMenu extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image:AssetImage('assets/images/background.png'),
+            image: AssetImage('assets/images/background.png'),
             fit: BoxFit.fill,
           ),
         ),
-        child:Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               PixelContainer(
-                child:Padding(
+                child: Padding(
                   padding: const EdgeInsets.all(20.0),
-                    child: Text('Flappy Bird',
+                  child: Text(
+                    'Flappy Bird',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 54,
+                      fontFamily: 'PixelFont',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              PixelContainer(
+                child: SizedBox(
+                  width: 300,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your name',
+                        hintStyle: TextStyle(
+                          fontFamily: 'PixelFont',
+                          color: Colors.black54,
+                        ),
+                        border: InputBorder.none,
+                      ),
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-
-                        fontSize: 54,
+                      style: const TextStyle(
+                        fontSize: 24,
                         fontFamily: 'PixelFont',
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                   ),
+                ),
               ),
-              const SizedBox(height: 50),
-              PixelButton(text: "Play", onPressed: onPlay),
               const SizedBox(height: 20),
-              PixelButton(text: "Exit", onPressed: (){exit(0);})
+              PixelButton(
+                text: "Play",
+                onPressed: () {
+                  widget.onSetPlayerName(_controller.text);
+                  widget.onPlay();
+                },
+              ),
+              const SizedBox(height: 20),
+              PixelButton(
+                text: "Exit",
+                onPressed: () {
+                  exit(0);
+                },
+              ),
             ],
           ),
-        ) ,
+        ),
       ),
     );
   }
 }
-
 
 class PixelContainer extends StatelessWidget {
   final Widget child;
@@ -58,15 +102,15 @@ class PixelContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.green, // Bright green, like the pipes in Flappy Bird
+        color: Colors.green,
         border: Border.all(
-          color: Colors.black, // Black border for strong arcade contrast
-          width: 5.0, // Bold border to emphasize pixelated design
+          color: Colors.black,
+          width: 5.0,
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.6),
-            offset: Offset(6, 6), // No blur to maintain sharp pixelated edges
+            offset: Offset(6, 6),
           ),
         ],
       ),
@@ -75,13 +119,11 @@ class PixelContainer extends StatelessWidget {
   }
 }
 
-
 class PixelButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const PixelButton({Key? key, required this.text, required this.onPressed})
-      : super(key: key);
+  const PixelButton({Key? key, required this.text, required this.onPressed}) : super(key: key);
 
   @override
   State<PixelButton> createState() => _PixelButtonState();
