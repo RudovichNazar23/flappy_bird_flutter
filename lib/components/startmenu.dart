@@ -13,7 +13,7 @@ class StartMenu extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image:AssetImage('assets/images/background.png'),
+            image:AssetImage('assets/images/mountains.png'),
             fit: BoxFit.fill,
           ),
         ),
