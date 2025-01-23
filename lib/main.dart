@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterbird/splash_screen.dart';
 import 'game_logic.dart';
 import 'components/startmenu.dart';
+import 'constants.dart' show groundSpeed;
 
 
 void main() {
@@ -40,7 +41,7 @@ class MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: _showSplash
           ? SplashScreen(onFinish: _finishSplash)
-          : (_isPlaying ? GameWidget(game: FlutterBird(playerName: '')) : StartMenu(onPlay: _startGame)),
+          : (_isPlaying ? GameWidget(game: FlutterBird(playerName: '', groundSpeed: groundSpeed)) : StartMenu(onPlay: _startGame)),
     );
   }
 }
