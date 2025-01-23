@@ -39,6 +39,8 @@ class StartMenu extends StatelessWidget {
               const SizedBox(height: 50),
               PixelButton(text: "Play", onPressed: onPlay),
               const SizedBox(height: 20),
+
+
               PixelButton(text: "Exit", onPressed: (){exit(0);})
             ],
           ),
