@@ -45,7 +45,7 @@ class MyAppState extends State<MyApp> {
           ? SplashScreen(onFinish: _finishSplash)
           : (_isPlaying
           ? GameWidget(
-        game: FlutterBird(groundSpeed: _groundSpeed),
+        game: FlutterBird(playerName: "", groundSpeed: _groundSpeed),
       )
           : StartMenu(onPlay: _startGame)),
     );
