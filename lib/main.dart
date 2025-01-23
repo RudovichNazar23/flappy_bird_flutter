@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutterbird/splash_screen.dart';
 import 'game_logic.dart';
 import 'components/startmenu.dart';
-import 'constants.dart';
 
 
 void main() {
@@ -22,12 +21,10 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   bool _isPlaying = false;
   bool _showSplash = true;
-  double _groundSpeed = 100;
 
-  void _startGame(double groundSpeed) {
+  void _startGame() {
     setState(() {
       _isPlaying = true;
-      _groundSpeed = groundSpeed;
     });
   }
 
@@ -43,11 +40,7 @@ class MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: _showSplash
           ? SplashScreen(onFinish: _finishSplash)
-          : (_isPlaying
-          ? GameWidget(
-        game: FlutterBird(groundSpeed: _groundSpeed),
-      )
-          : StartMenu(onPlay: _startGame)),
+          : (_isPlaying ? GameWidget(game: FlutterBird(playerName: '')) : StartMenu(onPlay: _startGame)),
     );
   }
 }

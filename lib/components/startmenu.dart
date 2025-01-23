@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class StartMenu extends StatelessWidget {
-  final void Function(double) onPlay;
+  final VoidCallback onPlay;
 
   const StartMenu({required this.onPlay, Key? key}) : super(key: key);
 
@@ -10,53 +11,43 @@ class StartMenu extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF264653),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/background.png'),
+            image:AssetImage('assets/images/background.png'),
             fit: BoxFit.fill,
           ),
         ),
-        child: Center(
+        child:Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               PixelContainer(
-                child: Padding(
+                child:Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    'Flappy Bird',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 54,
-                      fontFamily: 'PixelFont',
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    child: Text('Flappy Bird',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+
+                        fontSize: 54,
+                        fontFamily: 'PixelFont',
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
               ),
               const SizedBox(height: 50),
-              PixelButton(
-                text: "Easy",
-                onPressed: () => onPlay(100), // Pass speed for Easy mode
-              ),
+              PixelButton(text: "Play", onPressed: onPlay),
               const SizedBox(height: 20),
-              PixelButton(
-                text: "Medium",
-                onPressed: () => onPlay(400), // Pass speed for Medium mode
-              ),
-              const SizedBox(height: 20),
-              PixelButton(
-                text: "Hard",
-                onPressed: () => onPlay(700), // Pass speed for Hard mode
-              ),
+              PixelButton(text: "Exit", onPressed: (){exit(0);})
             ],
           ),
-        ),
+        ) ,
       ),
     );
   }
 }
+
 
 class PixelContainer extends StatelessWidget {
   final Widget child;
@@ -67,15 +58,15 @@ class PixelContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.green,
+        color: Colors.green, // Bright green, like the pipes in Flappy Bird
         border: Border.all(
-          color: Colors.black,
-          width: 5.0,
+          color: Colors.black, // Black border for strong arcade contrast
+          width: 5.0, // Bold border to emphasize pixelated design
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.6),
-            offset: const Offset(6, 6),
+            offset: Offset(6, 6), // No blur to maintain sharp pixelated edges
           ),
         ],
       ),
@@ -83,6 +74,7 @@ class PixelContainer extends StatelessWidget {
     );
   }
 }
+
 
 class PixelButton extends StatefulWidget {
   final String text;
