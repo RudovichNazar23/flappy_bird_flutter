@@ -15,9 +15,6 @@ import 'components/startmenu.dart';
 
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
   final String playerName;
-
-  FlutterBird({required this.playerName});
-
   late Bird bird;
   late Background background;
   late Ground ground;
@@ -25,7 +22,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late ScoreText scoreText;
   final double groundSpeed;
 
-  FlutterBird({required this.groundSpeed});
+  FlutterBird({required this.groundSpeed, required this.playerName});
 
   int score = 0;
   bool isGameOver = false;
