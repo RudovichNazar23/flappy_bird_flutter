@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
-class StartMenu extends StatelessWidget {
-  final void Function(double) onPlay;
+class StartMenu extends StatefulWidget {
+  final void Function(double, String) onPlay;
 
   const StartMenu({required this.onPlay, Key? key}) : super(key: key);
+
+  @override
+  State<StartMenu> createState() => _StartMenuState();
+}
+
+class _StartMenuState extends State<StartMenu> {
+  final TextEditingController _nicknameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +43,63 @@ class StartMenu extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 50),
+              // Pole tekstowe dla nicka
+              PixelContainer(
+                child: SizedBox(
+                  width: 300, // Szerokość boxa
+                  child: TextField(
+                    controller: _nicknameController,
+                    decoration: InputDecoration(
+                      hintText: 'Enter your nickname',
+                      hintStyle: const TextStyle(
+                        fontFamily: 'PixelFont',
+                        color: Colors.grey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.black, width: 3),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'PixelFont',
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
               PixelButton(
                 text: "Easy",
-                onPressed: () => onPlay(100), // Pass speed for Easy mode
+                onPressed: () {
+                  final nickname = _nicknameController.text;
+                  if (nickname.isNotEmpty) {
+                    widget.onPlay(100, nickname); // Pass speed and nickname
+                  }
+                },
               ),
               const SizedBox(height: 20),
               PixelButton(
                 text: "Medium",
-                onPressed: () => onPlay(400), // Pass speed for Medium mode
+                onPressed: () {
+                  final nickname = _nicknameController.text;
+                  if (nickname.isNotEmpty) {
+                    widget.onPlay(400, nickname); // Pass speed and nickname
+                  }
+                },
               ),
               const SizedBox(height: 20),
               PixelButton(
                 text: "Hard",
-                onPressed: () => onPlay(700), // Pass speed for Hard mode
+                onPressed: () {
+                  final nickname = _nicknameController.text;
+                  if (nickname.isNotEmpty) {
+                    widget.onPlay(700, nickname); // Pass speed and nickname
+                  }
+                },
               ),
             ],
           ),
