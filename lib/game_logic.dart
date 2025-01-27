@@ -11,12 +11,14 @@ import 'components/pipe_manager.dart';
 import 'constants.dart';
 import 'main.dart';
 import 'components/startmenu.dart';
+import 'components/stars.dart' show Stars;
 
 
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
   final String playerName;
   late Bird bird;
   late Background background;
+  late Stars stars;
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
@@ -31,6 +33,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   Future<void> onLoad() async {
     background = Background(size);
     add(background);
+
+    stars = Stars(size);
+    add(stars);
 
     bird = Bird();
     add(bird);

@@ -10,16 +10,13 @@ class Bird extends SpriteComponent with CollisionCallbacks {
   Bird() : super(position: Vector2(birdStartX, birdStartY), size: Vector2(birdwidth, birdheight));
 
   double velocity = 0;
-  late Sprite upFlapSprite;
-  late Sprite downFlapSprite;
-  late Sprite midFlapSprite;
+  late Sprite rocketModel;
+
 
   @override
   FutureOr<void> onLoad() async {
-    upFlapSprite = await Sprite.load('redbird-upflap.png');
-    downFlapSprite = await Sprite.load('redbird-downflap.png');
-    midFlapSprite = await Sprite.load('redbird-midflap.png');
-    sprite = midFlapSprite;
+    rocketModel = await Sprite.load('astronaut.png');
+    sprite = rocketModel;
 
     add(RectangleHitbox());
   }
