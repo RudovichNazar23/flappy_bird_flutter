@@ -9,7 +9,9 @@ class PipeManager extends Component with HasGameRef<FlutterBird> {
 
   @override
   void update(double dt) {
+    super.update(dt);
     pipeSpawnTimer += dt;
+
     if (pipeSpawnTimer > PipeInterval) {
       pipeSpawnTimer = 0;
       spawnPipe();
@@ -19,7 +21,8 @@ class PipeManager extends Component with HasGameRef<FlutterBird> {
   void spawnPipe() {
     final double screenHeight = gameRef.size.y;
     final double maxPipeHeight = screenHeight - groundHeight - PipeGap - minPipeHeight;
-    final double bottomPipeHeight = minPipeHeight + Random().nextDouble() * (maxPipeHeight - minPipeHeight);
+    final double bottomPipeHeight =
+        minPipeHeight + Random().nextDouble() * (maxPipeHeight - minPipeHeight);
     final double topPipeHeight = screenHeight - groundHeight - bottomPipeHeight - PipeGap;
 
     final bottomPipe = Pipe(
@@ -34,6 +37,7 @@ class PipeManager extends Component with HasGameRef<FlutterBird> {
       isTopPipe: true,
     );
 
+    // Add pipes to the game
     gameRef.add(bottomPipe);
     gameRef.add(topPipe);
   }
