@@ -12,7 +12,7 @@ class StartMenu extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/background.png'),
+            image:AssetImage('assets/images/mountains.png'),
             fit: BoxFit.fill,
           ),
         ),
@@ -67,7 +67,7 @@ class PixelContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.green,
+        color: Colors.blueAccent[200], // Bright green, like the pipes in Flappy Bird
         border: Border.all(
           color: Colors.black,
           width: 5.0,
@@ -117,7 +117,7 @@ class _PixelButtonState extends State<PixelButton> {
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
           decoration: BoxDecoration(
-            color: _isHovered ? Colors.green : Colors.yellow,
+            color: Colors.purple,
             border: Border.all(
               color: Colors.black,
               width: 5.0,
@@ -136,7 +136,7 @@ class _PixelButtonState extends State<PixelButton> {
             style: const TextStyle(
               fontSize: 32,
               fontFamily: 'PixelFont',
-              color: Colors.black,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
