@@ -1,7 +1,7 @@
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Dodajemy brakujący import
+import 'package:flutter/services.dart';
 import 'package:flutterbird/components/bird.dart';
 import 'package:flutterbird/components/score.dart';
 import 'components/background.dart';
@@ -12,6 +12,7 @@ import 'constants.dart';
 import 'main.dart';
 import 'components/startmenu.dart';
 import 'components/stars.dart' show Stars;
+import 'components/rock_manager.dart' show RockManager;
 
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
   late Bird bird;
@@ -20,6 +21,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
+  late RockManager rock;
 
   @override
   Future<void> onLoad() async {
@@ -34,6 +36,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
     ground = Ground();
     add(ground);
+
+    rock = RockManager();
+    add(rock);
 
     pipeManager = PipeManager();
     add(pipeManager);
