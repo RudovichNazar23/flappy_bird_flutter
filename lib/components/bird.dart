@@ -30,15 +30,6 @@ class Bird extends SpriteComponent with CollisionCallbacks {
     velocity += gravity * dt;
     position.y += velocity * dt;
 
-    // Zmiana sprite'ów w zależności od prędkości
-    if (velocity < 0) {
-      sprite = upFlapSprite;
-    } else if (velocity > 0) {
-      sprite = downFlapSprite;
-    } else {
-      sprite = midFlapSprite;
-    }
-
     // Sprawdzenie kolizji z sufitem
     if (position.y <= 0) {
       position.y = 0; // Zatrzymanie ptaka na suficie
