@@ -20,6 +20,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
+  final double groundSpeed;
+
+  FlutterBird({required this.groundSpeed});
 
   @override
   Future<void> onLoad() async {
