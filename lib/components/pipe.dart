@@ -13,7 +13,7 @@ Pipe(Vector2 position, Vector2 size, {required this.isTopPipe})
 
 @override
   FutureOr<void> onLoad() async{
-    sprite = await Sprite.load(isTopPipe ? 'top-pipe.png' : 'bottom-pipe.png');
+    sprite = await Sprite.load(isTopPipe ? 'pipe-top.png' : 'pipe-bottom.png');
 
     add(RectangleHitbox());
   }
