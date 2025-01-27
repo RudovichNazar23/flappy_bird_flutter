@@ -22,7 +22,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/launch_icon.png"
+  image_path: "assets/images/astronaut.png"
 
 flutter:
   uses-material-design: true

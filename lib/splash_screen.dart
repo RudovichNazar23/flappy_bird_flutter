@@ -15,12 +15,12 @@ class SplashScreen extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/background-image.png',
+              'assets/images/mountains.png',
               fit: BoxFit.cover, // Ensure the image covers the entire screen
             ),
           ),
           Center(
-            child: Image.asset('assets/images/Flappy_Logo.png'), // Your logo image
+            child: Image.asset('assets/images/KaliopLogo.png'), // Your logo image
           ),
         ],
       ),
