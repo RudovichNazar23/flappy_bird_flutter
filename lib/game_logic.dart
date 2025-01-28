@@ -1,13 +1,15 @@
+import 'dart:async';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Dodajemy brakujący import
+import 'package:flutter/services.dart';
 import 'package:flutterbird/components/bird.dart';
 import 'package:flutterbird/components/score.dart';
 import 'components/background.dart';
 import 'components/ground.dart';
 import 'components/pipe.dart';
 import 'components/pipe_manager.dart';
+import 'components/timer_text.dart'; // Import TimerText
 import 'constants.dart';
 import 'main.dart';
 import 'components/startmenu.dart';
@@ -18,6 +20,12 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
+  late TimerText timerText;
+
+  double remainingTime = 60.0;
+  double timeSurvived = 0.0;
+  bool isGameOver = false;
+  int score = 0;
 
   @override
   Future<void> onLoad() async {
@@ -35,30 +43,46 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
     scoreText = ScoreText();
     add(scoreText);
+
+    timerText = TimerText();
+    add(timerText);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (!isGameOver) {
+      if (remainingTime > 0) {
+        remainingTime -= dt;
+        timeSurvived += dt;
+        if (remainingTime <= 0) {
+          remainingTime = 0;
+          gameOver();
+        }
+      }
+    }
   }
 
   @override
   void onTap() {
-    bird.flap();
+    if (!isGameOver) {
+      bird.flap();
+    }
   }
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keys) {
-
-    if (event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
+    if (!isGameOver && event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
       bird.flap();
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
   }
 
-  int score = 0;
-
   void incrementScore() {
     score += 1;
   }
-
-  bool isGameOver = false;
 
   void gameOver() {
     if (isGameOver) return;
@@ -66,6 +90,11 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     isGameOver = true;
     pauseEngine();
 
+
+    String dialogTitle = remainingTime <= 0 && timeSurvived >= 60.0 ? 'Congratulations!' : 'Game Over';
+    String dialogMessage = remainingTime <= 0 && timeSurvived >= 60.0
+        ? 'You completed the game!'
+        : 'Score: $score\nTime: ${timeSurvived.toStringAsFixed(1)}';
 
     showDialog(
       context: buildContext!,
@@ -78,51 +107,50 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Container(
-              child: PixelContainer(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'Game Over',
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontFamily: "PixelFont",
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFF9FBF2),
-                      ),
+            child: PixelContainer(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    dialogTitle,
+                    style: const TextStyle(
+                      fontSize: 48,
+                      fontFamily: "PixelFont",
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Score: $score',
-                      style: const TextStyle(
-                        fontFamily: 'PixelFont',
-                        fontSize: 32,
-                        color: Color(0xFFE9C46A),
-                      ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    dialogMessage,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: 'PixelFont',
+                      fontSize: 24,
+                      color: Colors.white,
                     ),
-                    const SizedBox(height: 20),
-                    PixelButton(
-                      text: 'Restart',
-                      onPressed: () {
-                        Navigator.pop(context);
-                        resetGame();
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    PixelButton(
-                      text: 'Game Menu',
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const MyApp()),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 20),
+                  PixelButton(
+                    text: 'Restart',
+                    onPressed: () {
+                      Navigator.pop(context);
+                      resetGame();
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  PixelButton(
+                    text: 'Game Menu',
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MyApp()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                ],
               ),
             ),
           ),
@@ -136,9 +164,13 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     bird.velocity = 0;
 
     score = 0;
+    remainingTime = 60.0;
+    timeSurvived = 0.0;
     isGameOver = false;
 
     children.whereType<Pipe>().forEach((pipe) => pipe.removeFromParent());
+
+    timerText.text = 'Time: 60.0s';
 
     resumeEngine();
   }
