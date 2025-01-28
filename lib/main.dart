@@ -36,7 +36,7 @@ class MyAppState extends State<MyApp> {
   final ValueNotifier<Size> _resolutionNotifier = ValueNotifier<Size>(const Size(800, 600));
   FlutterBird? _gameInstance;
 
-  void _startGame(double groundSpeed, String playerName) {
+  void _startGame(double groundSpeed, double pipeSpawnDistance , String playerName) {
     setState(() {
       _isPlaying = true;
       _groundSpeed = groundSpeed;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class StartMenu extends StatefulWidget {
-  final void Function(double, String) onPlay;
+  final void Function(double, double, String) onPlay;
 
   const StartMenu({required this.onPlay, Key? key}) : super(key: key);
 

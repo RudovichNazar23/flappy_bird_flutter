@@ -44,6 +44,15 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     ground = Ground();
     add(ground);
 
+    rock = ItemManager('rock.png');
+    add(rock);
+
+    bush = ItemManager('bush.png');
+    add(bush);
+
+    grass = ItemManager('grass.png');
+    add(grass);
+
     pipeManager = PipeManager();
     add(pipeManager);
 

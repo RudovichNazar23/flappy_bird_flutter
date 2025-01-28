@@ -88,14 +88,16 @@ class PipeManager extends Component with HasGameRef<FlutterBird> {
     // Dodatkowe sprawdzenie bezpieczeństwa
     if (bottomPipeHeight < minPipeHeight || topPipeHeight < minPipeHeight) return;
 
+    final double spawnX = isFirstSpawn ? gameRef.size.x : gameRef.size.x;
+
     final bottomPipe = Pipe(
-      Vector2(gameRef.size.x, screenHeight - groundHeight - bottomPipeHeight),
+      Vector2(spawnX, screenHeight - groundHeight - bottomPipeHeight),
       Vector2(pipeWidth, bottomPipeHeight),
       isTopPipe: false,
     );
 
     final topPipe = Pipe(
-      Vector2(gameRef.size.x, 0),
+      Vector2(spawnX, 0),
       Vector2(pipeWidth, topPipeHeight),
       isTopPipe: true,
     );

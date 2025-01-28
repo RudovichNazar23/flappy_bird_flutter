@@ -2,7 +2,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutterbird/game_logic.dart';
 import 'dart:async';
-
 import '../constants.dart';
 
 class Pipe extends SpriteComponent with CollisionCallbacks, HasGameRef<FlutterBird> {

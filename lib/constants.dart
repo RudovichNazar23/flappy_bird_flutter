@@ -9,5 +9,8 @@ const double PipeInterval = 2;
 const double PipeGap = 200;
 const double minPipeHeight = 50;
 const double pipeWidth = 60;
+const minItemHeight = 25;
+const maxItemHeight = 25;
+const itemInterval = 5;
 
 double groundSpeed = 100;
