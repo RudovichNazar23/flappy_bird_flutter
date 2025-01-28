@@ -91,7 +91,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
         remainingTime -= dt;
         timeSurvived += dt;
 
-        timerText.text = 'Time: ${remainingTime.toStringAsFixed(1)}s';
+        timerText.text = 'Time: ${remainingTime.toStringAsFixed(1)}';
         if (remainingTime <= 0) {
           remainingTime = 0;
           gameOver();
@@ -131,7 +131,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     String dialogTitle = remainingTime <= 0 && timeSurvived >= 60.0 ? 'Congratulations!' : 'Game Over';
     String dialogMessage = remainingTime <= 0 && timeSurvived >= 60.0
         ? 'You completed the game!'
-        : 'Player: $playerName\nScore: $score\nTime: ${timeSurvived.toStringAsFixed(1)}s';
+        : 'Player: $playerName\nScore: $score\nTime: ${timeSurvived.toStringAsFixed(1)}';
 
     showDialog(
       context: buildContext!,
