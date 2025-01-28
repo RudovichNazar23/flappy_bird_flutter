@@ -22,13 +22,15 @@ class MyAppState extends State<MyApp> {
   bool _isPlaying = false;
   bool _showSplash = true;
   double _groundSpeed = 100;
-  String _playerName = ""; // Added a field to hold the player's nickname.
+  String _playerName = "";
+  double _pipeSpawnDistance = 250;
 
-  void _startGame(double groundSpeed, String playerName) {
+  void _startGame(double groundSpeed, double pipeSpawnDistance , String playerName) {
     setState(() {
       _isPlaying = true;
       _groundSpeed = groundSpeed;
-      _playerName = playerName; // Store the player's nickname.
+      _playerName = playerName;
+      _pipeSpawnDistance = pipeSpawnDistance;
     });
   }
 
@@ -47,11 +49,12 @@ class MyAppState extends State<MyApp> {
           : (_isPlaying
           ? GameWidget(
         game: FlutterBird(
-          playerName: _playerName, // Pass the player's nickname to the game.
+          playerName: _playerName,
           groundSpeed: _groundSpeed,
+          pipeSpawnDistance: _pipeSpawnDistance,
         ),
       )
-          : StartMenu(onPlay: _startGame)), // Pass the updated _startGame method.
+          : StartMenu(onPlay: _startGame)),
     );
   }
 }

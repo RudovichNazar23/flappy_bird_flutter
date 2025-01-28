@@ -29,8 +29,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late BushManager bush;
   late GrassManager grass;
   final double groundSpeed;
+  final double pipeSpawnDistance;
 
-  FlutterBird({required this.groundSpeed, required this.playerName});
+  FlutterBird({required this.groundSpeed, required this.playerName, required this.pipeSpawnDistance});
 
   int score = 0;
   bool isGameOver = false;

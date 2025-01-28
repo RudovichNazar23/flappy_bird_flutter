@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class StartMenu extends StatefulWidget {
-  final void Function(double, String) onPlay;
+  final void Function(double, double, String) onPlay;
 
   const StartMenu({required this.onPlay, Key? key}) : super(key: key);
 
@@ -77,7 +77,7 @@ class _StartMenuState extends State<StartMenu> {
                 onPressed: () {
                   final nickname = _nicknameController.text;
                   if (nickname.isNotEmpty) {
-                    widget.onPlay(100, nickname); // Pass speed and nickname
+                    widget.onPlay(150, 250, nickname);
                   }
                 },
               ),
@@ -87,7 +87,7 @@ class _StartMenuState extends State<StartMenu> {
                 onPressed: () {
                   final nickname = _nicknameController.text;
                   if (nickname.isNotEmpty) {
-                    widget.onPlay(400, nickname); // Pass speed and nickname
+                    widget.onPlay(400, 390 , nickname);
                   }
                 },
               ),
@@ -97,7 +97,7 @@ class _StartMenuState extends State<StartMenu> {
                 onPressed: () {
                   final nickname = _nicknameController.text;
                   if (nickname.isNotEmpty) {
-                    widget.onPlay(700, nickname); // Pass speed and nickname
+                    widget.onPlay(700, 600 , nickname);
                   }
                 },
               ),
