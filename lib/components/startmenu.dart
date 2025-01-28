@@ -7,6 +7,10 @@ class StartMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double fontSize = screenWidth * 0.05;
+    double buttonWidth = screenWidth * 0.3; // Adjusted for horizontal layout
+
     return Scaffold(
       backgroundColor: const Color(0xFF264653),
       body: Container(
@@ -26,8 +30,8 @@ class StartMenu extends StatelessWidget {
                   child: Text(
                     'Flappy Bird',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 54,
+                    style: TextStyle(
+                      fontSize: fontSize * 1.08,
                       fontFamily: 'PixelFont',
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -36,19 +40,30 @@ class StartMenu extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 50),
-              PixelButton(
-                text: "Easy",
-                onPressed: () => onPlay(100), // Pass speed for Easy mode
-              ),
-              const SizedBox(height: 20),
-              PixelButton(
-                text: "Medium",
-                onPressed: () => onPlay(400), // Pass speed for Medium mode
-              ),
-              const SizedBox(height: 20),
-              PixelButton(
-                text: "Hard",
-                onPressed: () => onPlay(700), // Pass speed for Hard mode
+              Wrap(
+                spacing: 20.0, // Space between buttons
+                runSpacing: 20.0, // Space between rows
+                alignment: WrapAlignment.center,
+                children: [
+                  PixelButton(
+                    text: "Easy",
+                    onPressed: () => onPlay(100), // Pass speed for Easy mode
+                    fontSize: fontSize,
+                    buttonWidth: buttonWidth,
+                  ),
+                  PixelButton(
+                    text: "Medium",
+                    onPressed: () => onPlay(400), // Pass speed for Medium mode
+                    fontSize: fontSize,
+                    buttonWidth: buttonWidth,
+                  ),
+                  PixelButton(
+                    text: "Hard",
+                    onPressed: () => onPlay(700), // Pass speed for Hard mode
+                    fontSize: fontSize,
+                    buttonWidth: buttonWidth,
+                  ),
+                ],
               ),
             ],
           ),
@@ -87,9 +102,16 @@ class PixelContainer extends StatelessWidget {
 class PixelButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
+  final double fontSize;
+  final double buttonWidth;
 
-  const PixelButton({Key? key, required this.text, required this.onPressed})
-      : super(key: key);
+  const PixelButton({
+    Key? key,
+    required this.text,
+    required this.onPressed,
+    required this.fontSize,
+    required this.buttonWidth,
+  }) : super(key: key);
 
   @override
   State<PixelButton> createState() => _PixelButtonState();
@@ -133,8 +155,8 @@ class _PixelButtonState extends State<PixelButton> {
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
           child: Text(
             widget.text,
-            style: const TextStyle(
-              fontSize: 32,
+            style: TextStyle(
+              fontSize: widget.fontSize,
               fontFamily: 'PixelFont',
               color: Colors.black,
               fontWeight: FontWeight.bold,

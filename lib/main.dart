@@ -5,7 +5,7 @@ import 'package:flutterbird/splash_screen.dart';
 import 'game_logic.dart';
 import 'components/startmenu.dart';
 import 'constants.dart';
-
+import 'responsivewidget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,13 +44,8 @@ class MyAppState extends State<MyApp> {
       home: _showSplash
           ? SplashScreen(onFinish: _finishSplash)
           : (_isPlaying
-          ? GameWidget(
-        game: FlutterBird(groundSpeed: _groundSpeed),
-      )
+          ? ResponsiveWidget()
           : StartMenu(onPlay: _startGame)),
     );
   }
 }
-
-
-//NEWBRANCH
