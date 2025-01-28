@@ -8,14 +8,14 @@ import 'components/background.dart';
 import 'components/ground.dart';
 import 'components/pipe.dart';
 import 'components/pipe_manager.dart';
-import 'constants.dart';
-import 'main.dart';
-import 'components/startmenu.dart';
+import 'components/timer_text.dart'; // Import TimerText
 import 'components/stars.dart' show Stars;
 import 'components/rock_manager.dart' show RockManager;
 import 'components/bush_manager.dart' show BushManager;
 import 'components/grass_manager.dart' show GrassManager;
-
+import 'constants.dart';
+import 'main.dart';
+import 'components/startmenu.dart';
 
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
   final String playerName;
@@ -25,31 +25,40 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
+  late TimerText timerText;
   late RockManager rock;
   late BushManager bush;
   late GrassManager grass;
+
   final double groundSpeed;
   final double pipeSpawnDistance;
 
-  FlutterBird({required this.groundSpeed, required this.playerName, required this.pipeSpawnDistance});
-
-  int score = 0;
+  double remainingTime = 60.0;
+  double timeSurvived = 0.0;
   bool isGameOver = false;
+  int score = 0;
+
+  FlutterBird({required this.groundSpeed, required this.playerName, required this.pipeSpawnDistance});
 
   @override
   Future<void> onLoad() async {
+    // Background
     background = Background(size);
     add(background);
 
+    // Stars
     stars = Stars(size);
     add(stars);
 
+    // Bird
     bird = Bird();
     add(bird);
 
+    // Ground
     ground = Ground();
     add(ground);
 
+    // Rock, Bush, and Grass Managers
     rock = RockManager();
     add(rock);
 
@@ -59,22 +68,48 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     grass = GrassManager();
     add(grass);
 
+    // Pipe Manager
     pipeManager = PipeManager();
     add(pipeManager);
 
+    // Score Text
     scoreText = ScoreText(playerName: playerName);
     add(scoreText);
+
+    // Timer Text
+    timerText = TimerText();
+    add(timerText);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (!isGameOver) {
+      // Update timer and survival time
+      if (remainingTime > 0) {
+        remainingTime -= dt;
+        timeSurvived += dt;
+
+        timerText.text = 'Time: ${remainingTime.toStringAsFixed(1)}s';
+        if (remainingTime <= 0) {
+          remainingTime = 0;
+          gameOver();
+        }
+      }
+    }
   }
 
   @override
   void onTap() {
-    bird.flap();
+    if (!isGameOver) {
+      bird.flap();
+    }
   }
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keys) {
-
-    if (event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
+    if (!isGameOver && event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
       bird.flap();
       return KeyEventResult.handled;
     }
@@ -92,6 +127,11 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     isGameOver = true;
     pauseEngine();
 
+    // Determine dialog title and message
+    String dialogTitle = remainingTime <= 0 && timeSurvived >= 60.0 ? 'Congratulations!' : 'Game Over';
+    String dialogMessage = remainingTime <= 0 && timeSurvived >= 60.0
+        ? 'You completed the game!'
+        : 'Player: $playerName\nScore: $score\nTime: ${timeSurvived.toStringAsFixed(1)}s';
 
     showDialog(
       context: buildContext!,
@@ -106,22 +146,22 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Game Over',
+                  dialogTitle,
                   style: const TextStyle(
                     fontSize: 48,
                     fontFamily: "PixelFont",
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFFF9FBF2),
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Player: $playerName\nScore: $score',
+                  dialogMessage,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontFamily: 'PixelFont',
-                    fontSize: 32,
-                    color: Color(0xFFE9C46A),
+                    fontSize: 24,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -157,9 +197,15 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     bird.velocity = 0;
 
     score = 0;
+    remainingTime = 60.0;
+    timeSurvived = 0.0;
     isGameOver = false;
 
+    // Remove pipes
     children.whereType<Pipe>().forEach((pipe) => pipe.removeFromParent());
+
+    // Reset timer
+    timerText.text = 'Time: 60.0s';
 
     resumeEngine();
   }
