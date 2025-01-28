@@ -1,11 +1,13 @@
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Dodano brakujący import
 import '../game_logic.dart';
 
 class ScoreText extends TextComponent with HasGameRef<FlutterBird> {
-  ScoreText()
+  final String playerName;
+
+  ScoreText({required this.playerName})
       : super(
-    text: '0',
+    text: '',
     textRenderer: TextPaint(
       style: const TextStyle(
         fontFamily: 'PixelFont',
@@ -22,14 +24,10 @@ class ScoreText extends TextComponent with HasGameRef<FlutterBird> {
     anchor = Anchor.topCenter;
     position = Vector2(gameRef.size.x / 2, 50);
     priority = 10;
+    updateScore(gameRef.score);
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-    final newText = gameRef.score.toString();
-    if (text != newText) {
-      text = newText;
-    }
+  void updateScore(int score) {
+    text = '$playerName: $score';
   }
 }

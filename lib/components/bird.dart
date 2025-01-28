@@ -30,6 +30,11 @@ class Bird extends SpriteComponent with CollisionCallbacks {
     velocity += gravity * dt;
     position.y += velocity * dt;
 
+    // Sprawdzenie kolizji z sufitem
+    if (position.y <= 0) {
+      position.y = 0; // Zatrzymanie ptaka na suficie
+      (parent as FlutterBird).gameOver(); // Wywołanie metody gameOver
+    }
   }
 
   @override

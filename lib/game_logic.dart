@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,9 @@ import 'components/startmenu.dart';
 import 'components/stars.dart' show Stars;
 import 'components/rock_manager.dart' show RockManager;
 
+
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
+  final String playerName;
   late Bird bird;
   late Background background;
   late Stars stars;
@@ -22,6 +26,12 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late PipeManager pipeManager;
   late ScoreText scoreText;
   late RockManager rock;
+  final double groundSpeed;
+
+  FlutterBird({required this.groundSpeed, required this.playerName});
+
+  int score = 0;
+  bool isGameOver = false;
 
   @override
   Future<void> onLoad() async {
@@ -43,7 +53,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     pipeManager = PipeManager();
     add(pipeManager);
 
-    scoreText = ScoreText();
+    scoreText = ScoreText(playerName: playerName);
     add(scoreText);
   }
 
@@ -62,13 +72,10 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     return KeyEventResult.ignored;
   }
 
-  int score = 0;
-
   void incrementScore() {
     score += 1;
+    scoreText.updateScore(score);
   }
-
-  bool isGameOver = false;
 
   void gameOver() {
     if (isGameOver) return;
@@ -81,59 +88,54 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
       context: buildContext!,
       barrierDismissible: false,
       builder: (context) {
-        return AnimatedOpacity(
-          opacity: isGameOver ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
-          child: Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Container(
-              child: PixelContainer(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'Game Over',
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontFamily: "PixelFont",
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFF9FBF2),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Score: $score',
-                      style: const TextStyle(
-                        fontFamily: 'PixelFont',
-                        fontSize: 32,
-                        color: Color(0xFFE9C46A),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    PixelButton(
-                      text: 'Restart',
-                      onPressed: () {
-                        Navigator.pop(context);
-                        resetGame();
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    PixelButton(
-                      text: 'Game Menu',
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const MyApp()),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                  ],
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: PixelContainer(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Game Over',
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontFamily: "PixelFont",
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFF9FBF2),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 10),
+                Text(
+                  'Player: $playerName\nScore: $score',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'PixelFont',
+                    fontSize: 32,
+                    color: Color(0xFFE9C46A),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                PixelButton(
+                  text: 'Restart',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    resetGame();
+                  },
+                ),
+                const SizedBox(height: 10),
+                PixelButton(
+                  text: 'Game Menu',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MyApp()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+              ],
             ),
           ),
         );
