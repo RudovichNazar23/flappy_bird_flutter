@@ -24,7 +24,11 @@ class ItemManager extends Component with HasGameRef<FlutterBird> {
     final double bottomItemHeight = minItemHeight + Random().nextDouble() * (maxItemHeight - minItemHeight);
 
     final item = Item(
-      Vector2(gameRef.size.x + Random().nextInt(400) + 600, screenHeight - groundHeight - bottomItemHeight),
+      Vector2(
+          gameRef.size.x + Random().nextInt(Random().nextInt(100) + 50) +
+              Random().nextInt(100) + 50,
+          screenHeight - groundHeight - bottomItemHeight
+      ),
       Vector2(pipeWidth, bottomItemHeight),
       imageName,
     );
