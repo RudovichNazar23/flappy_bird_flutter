@@ -12,9 +12,7 @@ import 'constants.dart';
 import 'main.dart';
 import 'components/startmenu.dart';
 import 'components/stars.dart' show Stars;
-import 'components/rock_manager.dart' show RockManager;
-import 'components/bush_manager.dart' show BushManager;
-import 'components/grass_manager.dart' show GrassManager;
+import 'components/item_manager.dart' show ItemManager;
 
 
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
@@ -25,9 +23,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
-  late RockManager rock;
-  late BushManager bush;
-  late GrassManager grass;
+  late ItemManager rock;
+  late ItemManager bush;
+  late ItemManager grass;
   final double groundSpeed;
   final double pipeSpawnDistance;
 
@@ -50,13 +48,13 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     ground = Ground();
     add(ground);
 
-    rock = RockManager();
+    rock = ItemManager('rock.png');
     add(rock);
 
-    bush = BushManager();
+    bush = ItemManager('bush.png');
     add(bush);
 
-    grass = GrassManager();
+    grass = ItemManager('grass.png');
     add(grass);
 
     pipeManager = PipeManager();
