@@ -33,4 +33,3 @@ class TimerText extends TextComponent with HasGameRef<FlutterBird> {
         : 'Time: 0.0';
   }
 }
-//
