@@ -6,7 +6,7 @@ import '../constants.dart';
 
 class Rock extends SpriteComponent with CollisionCallbacks, HasGameRef<FlutterBird> {
   Rock(Vector2 position, Vector2 size)
-      : super(position: position, size: size);
+      : super(position: position, size: size, priority: 1);
 
   @override
   FutureOr<void> onLoad() async{
