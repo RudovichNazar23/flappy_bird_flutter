@@ -4,8 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterbird/splash_screen.dart';
 import 'game_logic.dart';
 import 'components/startmenu.dart';
-import 'constants.dart' show groundSpeed;
-
+import 'constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,10 +21,16 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   bool _isPlaying = false;
   bool _showSplash = true;
+  double _groundSpeed = 100;
+  String _playerName = "";
+  double _pipeSpawnDistance = 250;
 
-  void _startGame() {
+  void _startGame(double groundSpeed, double pipeSpawnDistance , String playerName) {
     setState(() {
       _isPlaying = true;
+      _groundSpeed = groundSpeed;
+      _playerName = playerName;
+      _pipeSpawnDistance = pipeSpawnDistance;
     });
   }
 
@@ -41,7 +46,15 @@ class MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: _showSplash
           ? SplashScreen(onFinish: _finishSplash)
-          : (_isPlaying ? GameWidget(game: FlutterBird(playerName: '', groundSpeed: groundSpeed)) : StartMenu(onPlay: _startGame)),
+          : (_isPlaying
+          ? GameWidget(
+        game: FlutterBird(
+          playerName: _playerName,
+          groundSpeed: _groundSpeed,
+          pipeSpawnDistance: _pipeSpawnDistance,
+        ),
+      )
+          : StartMenu(onPlay: _startGame)),
     );
   }
 }
