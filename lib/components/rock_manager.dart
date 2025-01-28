@@ -18,7 +18,6 @@ class RockManager extends Component with HasGameRef<FlutterBird> {
 
   void spawnRock() {
     final double screenHeight = gameRef.size.y;
-    // final double maxRockHeight = screenHeight - groundHeight - PipeGap - minRockHeight;
     final double bottomRockHeight = minRockHeight + Random().nextDouble() * (maxRockHeight - minRockHeight);
 
     final bottomRock = Rock(
