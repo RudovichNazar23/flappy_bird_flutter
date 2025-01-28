@@ -10,25 +10,26 @@ import 'components/pipe.dart';
 import 'components/pipe_manager.dart';
 import 'constants.dart';
 import 'main.dart';
+import 'components/startmenu.dart';
+import 'components/stars.dart' show Stars;
+import 'components/item_manager.dart' show ItemManager;
+
 
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
-  late final String playerName;
+  final String playerName;
   late Bird bird;
   late Background background;
+  late Stars stars;
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
-  late final double groundSpeed;
-  final ValueNotifier<Size> resolutionNotifier;
-  bool _isShowingGameOver = false;
+  late ItemManager rock;
+  late ItemManager bush;
+  late ItemManager grass;
+  final double groundSpeed;
+  final double pipeSpawnDistance;
 
-  FlutterBird({
-    required this.groundSpeed,
-    required this.playerName,
-    required this.resolutionNotifier
-  }) {
-    resolutionNotifier.addListener(_onResolutionChanged);
-  }
+  FlutterBird({required this.groundSpeed, required this.playerName, required this.pipeSpawnDistance});
 
   int score = 0;
   bool isGameOver = false;
@@ -37,6 +38,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   Future<void> onLoad() async {
     background = Background(size);
     add(background);
+
+    stars = Stars(size);
+    add(stars);
 
     bird = Bird();
     add(bird);
@@ -62,14 +66,13 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
   @override
   void onTap() {
-    if (!isGameOver) {
-      bird.flap();
-    }
+    bird.flap();
   }
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keys) {
-    if (!isGameOver && event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
+
+    if (event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
       bird.flap();
       return KeyEventResult.handled;
     }
@@ -82,94 +85,69 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   }
 
   void gameOver() {
-    if (isGameOver || _isShowingGameOver) return;
+    if (isGameOver) return;
 
     isGameOver = true;
-    _isShowingGameOver = true;
     pauseEngine();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (buildContext != null) {
-        showDialog(
-          context: buildContext!,
-          barrierDismissible: false,
-          builder: (context) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent[200],
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 5.0,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.6),
-                      offset: const Offset(6, 6),
-                      blurRadius: 0,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        'Game Over',
-                        style: TextStyle(
-                          fontSize: 48,
-                          fontFamily: 'PixelFont',
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFF9FBF2),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Player: $playerName\nScore: $score',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontFamily: 'PixelFont',
-                          fontSize: 32,
-                          color: Color(0xFFE9C46A),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      GameOverButton(
-                        text: 'Restart',
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _isShowingGameOver = false;
-                          resetGame();
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      GameOverButton(
-                        text: 'Game Menu',
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _isShowingGameOver = false;
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const MyApp()),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                    ],
+
+    showDialog(
+      context: buildContext!,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: PixelContainer(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Game Over',
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontFamily: "PixelFont",
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFF9FBF2),
                   ),
                 ),
-              ),
-            );
-          },
-        ).then((_) {
-          _isShowingGameOver = false;
-        });
-      }
-    });
+                const SizedBox(height: 10),
+                Text(
+                  'Player: $playerName\nScore: $score',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'PixelFont',
+                    fontSize: 32,
+                    color: Color(0xFFE9C46A),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                PixelButton(
+                  text: 'Restart',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    resetGame();
+                  },
+                ),
+                const SizedBox(height: 10),
+                PixelButton(
+                  text: 'Game Menu',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MyApp()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void resetGame() {
@@ -178,104 +156,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
     score = 0;
     isGameOver = false;
-    _isShowingGameOver = false;
 
     children.whereType<Pipe>().forEach((pipe) => pipe.removeFromParent());
 
     resumeEngine();
-  }
-
-  void _onResolutionChanged() {
-    if (!hasLayout) return;
-
-    final newSize = Vector2(
-        resolutionNotifier.value.width,
-        resolutionNotifier.value.height
-    );
-
-    background.size = newSize;
-    ground.size = newSize;
-  }
-
-  @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
-  }
-
-  @override
-  void onRemove() {
-    resolutionNotifier.removeListener(_onResolutionChanged);
-    super.onRemove();
-  }
-}
-
-class GameOverButton extends StatefulWidget {
-  final String text;
-  final VoidCallback onPressed;
-
-  const GameOverButton({
-    Key? key,
-    required this.text,
-    required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  State<GameOverButton> createState() => _GameOverButtonState();
-}
-
-class _GameOverButtonState extends State<GameOverButton> {
-  bool _isHovered = false;
-  bool _isPressed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
-        onTap: widget.onPressed,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeInOut,
-          width: 200,
-          height: 60,
-          decoration: BoxDecoration(
-            color: _isPressed
-                ? Colors.purple[900]
-                : _isHovered
-                ? Colors.purple[700]
-                : Colors.purple,
-            border: Border.all(
-              color: Colors.black,
-              width: 5.0,
-            ),
-            boxShadow: _isPressed
-                ? []
-                : [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.6),
-                offset: const Offset(6, 6),
-                blurRadius: 0,
-              ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              widget.text,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 32,
-                fontFamily: 'PixelFont',
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
