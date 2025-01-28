@@ -9,5 +9,9 @@ const double PipeInterval = 2;
 const double PipeGap = 200;
 const double minPipeHeight = 50;
 const double pipeWidth = 60;
+const minRockHeight = 25;
+const maxRockHeight = 25;
+const minBushHeight = 25;
+const maxBushHeight = 25;
 
 double groundSpeed = 100;
