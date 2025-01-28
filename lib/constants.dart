@@ -13,5 +13,7 @@ const minRockHeight = 25;
 const maxRockHeight = 25;
 const minBushHeight = 25;
 const maxBushHeight = 25;
+const minGrassHeight = 25;
+const maxGrassHeight = 25;
 
 double groundSpeed = 100;
