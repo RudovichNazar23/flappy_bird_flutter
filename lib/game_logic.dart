@@ -191,7 +191,6 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
       },
     );
   }
-
   void resetGame() {
     bird.position = Vector2(birdStartX, birdStartY);
     bird.velocity = 0;
