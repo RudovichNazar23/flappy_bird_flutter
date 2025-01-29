@@ -6,6 +6,7 @@ import 'game_logic.dart';
 import 'components/startmenu.dart';
 import 'constants.dart';
 
+
 void main() {
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
