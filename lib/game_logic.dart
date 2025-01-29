@@ -8,14 +8,13 @@ import 'components/background.dart';
 import 'components/ground.dart';
 import 'components/pipe.dart';
 import 'components/pipe_manager.dart';
+import 'components/startmenu.dart';
 import 'components/timer_text.dart'; // Import TimerText
 import 'components/stars.dart' show Stars;
-import 'components/rock_manager.dart' show RockManager;
-import 'components/bush_manager.dart' show BushManager;
-import 'components/grass_manager.dart' show GrassManager;
+import 'components/item_manager.dart' show ItemManager;
 import 'constants.dart';
 import 'main.dart';
-import 'components/startmenu.dart';
+
 
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
   final String playerName;
@@ -25,11 +24,10 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
+  late ItemManager rock;
+  late ItemManager bush;
+  late ItemManager grass;
   late TimerText timerText;
-  late RockManager rock;
-  late BushManager bush;
-  late GrassManager grass;
-
   final double groundSpeed;
   final double pipeSpawnDistance;
 
@@ -42,37 +40,30 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
   @override
   Future<void> onLoad() async {
-    // Background
     background = Background(size);
     add(background);
 
-    // Stars
     stars = Stars(size);
     add(stars);
 
-    // Bird
     bird = Bird();
     add(bird);
 
-    // Ground
     ground = Ground();
     add(ground);
 
-    // Rock, Bush, and Grass Managers
-    rock = RockManager();
+    rock = ItemManager('rock.png');
     add(rock);
 
-    bush = BushManager();
+    bush = ItemManager('bush.png');
     add(bush);
 
-    grass = GrassManager();
+    grass = ItemManager('grass.png');
     add(grass);
 
-    // Pipe Manager
     pipeManager = PipeManager();
     add(pipeManager);
 
-    // Score Text
     scoreText = ScoreText(playerName: playerName);
     add(scoreText);
 
@@ -146,22 +137,22 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  dialogTitle,
+                  'Game Over',
                   style: const TextStyle(
                     fontSize: 48,
                     fontFamily: "PixelFont",
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: Color(0xFFF9FBF2),
                   ),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  dialogMessage,
+                  'Player: $playerName\nScore: $score',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontFamily: 'PixelFont',
-                    fontSize: 24,
-                    color: Colors.white,
+                    fontSize: 32,
+                    color: Color(0xFFE9C46A),
                   ),
                 ),
                 const SizedBox(height: 20),
