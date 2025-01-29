@@ -11,8 +11,11 @@ import 'components/pipe_manager.dart';
 import 'constants.dart';
 import 'main.dart';
 import 'components/startmenu.dart';
+import 'components/timer_text.dart'; // Import TimerText
 import 'components/stars.dart' show Stars;
 import 'components/item_manager.dart' show ItemManager;
+import 'constants.dart';
+import 'main.dart';
 
 
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
@@ -26,13 +29,16 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late ItemManager rock;
   late ItemManager bush;
   late ItemManager grass;
+  late TimerText timerText;
   final double groundSpeed;
   final double pipeSpawnDistance;
 
-  FlutterBird({required this.groundSpeed, required this.playerName, required this.pipeSpawnDistance});
-
-  int score = 0;
+  double remainingTime = 60.0;
+  double timeSurvived = 0.0;
   bool isGameOver = false;
+  int score = 0;
+
+  FlutterBird({required this.groundSpeed, required this.playerName, required this.pipeSpawnDistance});
 
   @override
   Future<void> onLoad() async {
@@ -60,20 +66,42 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     pipeManager = PipeManager();
     add(pipeManager);
 
-    // Score Text
     scoreText = ScoreText(playerName: playerName);
     add(scoreText);
+
+    timerText = TimerText();
+    add(timerText);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (!isGameOver) {
+
+      if (remainingTime > 0) {
+        remainingTime -= dt;
+        timeSurvived += dt;
+
+        timerText.text = 'Time: ${remainingTime.toStringAsFixed(1)}';
+        if (remainingTime <= 0) {
+          remainingTime = 0;
+          gameOver();
+        }
+      }
+    }
   }
 
   @override
   void onTap() {
-    bird.flap();
+    if (!isGameOver) {
+      bird.flap();
+    }
   }
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keys) {
-
-    if (event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
+    if (!isGameOver && event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
       bird.flap();
       return KeyEventResult.handled;
     }
@@ -91,6 +119,11 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     isGameOver = true;
     pauseEngine();
 
+
+    String dialogTitle = remainingTime <= 0 && timeSurvived >= 60.0 ? 'Congratulations!' : 'Game Over';
+    String dialogMessage = remainingTime <= 0 && timeSurvived >= 60.0
+        ? 'You completed the game!'
+        : 'Player: $playerName\nScore: $score\nTime: ${timeSurvived.toStringAsFixed(1)}';
 
     showDialog(
       context: buildContext!,
@@ -115,7 +148,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Player: $playerName\nScore: $score',
+                  dialogMessage,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontFamily: 'PixelFont',
@@ -150,14 +183,19 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
       },
     );
   }
+
   void resetGame() {
     bird.position = Vector2(birdStartX, birdStartY);
     bird.velocity = 0;
 
     score = 0;
+    remainingTime = 60.0;
+    timeSurvived = 0.0;
     isGameOver = false;
 
     children.whereType<Pipe>().forEach((pipe) => pipe.removeFromParent());
+
+    timerText.text = 'Time: 60.0s';
 
     resumeEngine();
   }
