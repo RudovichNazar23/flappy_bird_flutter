@@ -11,18 +11,25 @@ import 'components/pipe_manager.dart';
 import 'constants.dart';
 import 'main.dart';
 import 'components/startmenu.dart';
+import 'components/stars.dart' show Stars;
+import 'components/item_manager.dart' show ItemManager;
 
 
 class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, KeyboardEvents {
   final String playerName;
   late Bird bird;
   late Background background;
+  late Stars stars;
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
+  late ItemManager rock;
+  late ItemManager bush;
+  late ItemManager grass;
   final double groundSpeed;
+  final double pipeSpawnDistance;
 
-  FlutterBird({required this.groundSpeed, required this.playerName});
+  FlutterBird({required this.groundSpeed, required this.playerName, required this.pipeSpawnDistance});
 
   int score = 0;
   bool isGameOver = false;
@@ -32,11 +39,23 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     background = Background(size);
     add(background);
 
+    stars = Stars(size);
+    add(stars);
+
     bird = Bird();
     add(bird);
 
     ground = Ground();
     add(ground);
+
+    rock = ItemManager('rock.png');
+    add(rock);
+
+    bush = ItemManager('bush.png');
+    add(bush);
+
+    grass = ItemManager('grass.png');
+    add(grass);
 
     pipeManager = PipeManager();
     add(pipeManager);
@@ -52,6 +71,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keys) {
+
     if (event is KeyDownEvent && keys.contains(LogicalKeyboardKey.space)) {
       bird.flap();
       return KeyEventResult.handled;
@@ -69,6 +89,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
     isGameOver = true;
     pauseEngine();
+
 
     showDialog(
       context: buildContext!,

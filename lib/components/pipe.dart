@@ -2,7 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutterbird/game_logic.dart';
 import 'dart:async';
-import '../constants.dart';
+
 
 class Pipe extends SpriteComponent with CollisionCallbacks, HasGameRef<FlutterBird> {
   final bool isTopPipe;
@@ -11,9 +11,9 @@ class Pipe extends SpriteComponent with CollisionCallbacks, HasGameRef<FlutterBi
   Pipe(Vector2 position, Vector2 size, {required this.isTopPipe})
       : super(position: position, size: size);
 
-  @override
-  FutureOr<void> onLoad() async {
-    sprite = await Sprite.load(isTopPipe ? 'top-pipe.png' : 'bottom-pipe.png');
+@override
+  FutureOr<void> onLoad() async{
+    sprite = await Sprite.load(isTopPipe ? 'pipe-top.png' : 'pipe-bottom.png');
     add(RectangleHitbox());
   }
 

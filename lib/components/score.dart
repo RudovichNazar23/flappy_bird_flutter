@@ -11,7 +11,7 @@ class ScoreText extends TextComponent with HasGameRef<FlutterBird> {
     textRenderer: TextPaint(
       style: const TextStyle(
         fontFamily: 'PixelFont',
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 36,
         fontWeight: FontWeight.bold,
       ),
