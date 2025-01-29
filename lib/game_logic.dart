@@ -147,7 +147,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Player: $playerName\nScore: $score',
+                  dialogMessage,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontFamily: 'PixelFont',
