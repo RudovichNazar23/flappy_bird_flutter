@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'components/background.dart';
 import 'components/bird.dart';
 import 'components/ground.dart';
@@ -35,6 +35,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   double timeSurvived = 0.0;
   bool isGameOver = false;
   int score = 0;
+
+  // Zmienna do obsługi efektu najechania
+  final ValueNotifier<String> hoveredButton = ValueNotifier('');
 
   FlutterBird({required this.groundSpeed, required this.playerName, required this.pipeSpawnDistance});
 
@@ -124,22 +127,13 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
       builder: (context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15), // Gentle rounding of corners
           ),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.blueAccent[200],
-              border: Border.all(
-                color: Colors.black,
-                width: 5.0,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.6),
-                  offset: const Offset(6, 6),
-                  blurRadius: 0,
-                ),
-              ],
+              borderRadius: BorderRadius.circular(15), // Gentle rounding of corners
+              // Removed the black border
             ),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -159,10 +153,10 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
                   Text(
                     dialogMessage,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontFamily: 'PixelFont',
-                      fontSize: 32,
-                      color: Color(0xFFE9C46A),
+                    style: GoogleFonts.inter(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -195,40 +189,36 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   }
 
   Widget _buildGameOverButton({required String text, required VoidCallback onPressed}) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onPressed,
-        child: Container(
-          width: 200,
-          height: 60,
-          decoration: BoxDecoration(
-            color: Colors.purple,
-            border: Border.all(
-              color: Colors.black,
-              width: 5.0,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.6),
-                offset: const Offset(6, 6),
-                blurRadius: 0,
+    return ValueListenableBuilder<String>(
+      valueListenable: hoveredButton,
+      builder: (context, hovered, child) {
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (_) => hoveredButton.value = text,
+          onExit: (_) => hoveredButton.value = '',
+          child: GestureDetector(
+            onTap: onPressed,
+            child: Container(
+              width: 210,
+              height: 60,
+              decoration: BoxDecoration(
+                color: hovered == text ? const Color(0xFF15caa8) : const Color(0xFF1be2bc),
+                borderRadius: BorderRadius.circular(15),
               ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              text,
-              style: const TextStyle(
-                fontSize: 32,
-                fontFamily: 'PixelFont',
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+              child: Center(
+                child: Text(
+                  text,
+                  style: GoogleFonts.inter(
+                    fontSize: 30,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
