@@ -53,16 +53,34 @@ class MyAppState extends State<MyApp> {
     });
   }
 
+  void _navigateToStartMenu() {
+    setState(() {
+      _currentScreen = 0; // Przejdź do ekranu startowego
+    });
+  }
+
+  void _navigateToNicknameInput() {
+    setState(() {
+      _currentScreen = 2; // Przejdź do ekranu wpisywania nicku
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget screen;
 
     switch (_currentScreen) {
       case 1:
-        screen = DifficultySelection(onSetDifficulty: _setDifficulty);
+        screen = DifficultySelection(
+          onSetDifficulty: _setDifficulty,
+          onBack: _navigateToStartMenu, // Dodano brakujący parametr
+        );
         break;
       case 2:
-        screen = NicknameInput(onSetPlayerName: _setPlayerName);
+        screen = NicknameInput(
+          onSetPlayerName: _setPlayerName,
+          onBack: _navigateToDifficultySelection, // Dodano brakujący parametr
+        );
         break;
       default:
         screen = StartMenu(onPlay: _navigateToDifficultySelection);

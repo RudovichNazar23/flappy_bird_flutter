@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 import 'pixel_button.dart';
 import 'background_scaffold.dart';
+import 'pixel_container.dart'; // Zaktualizowany import
 
 class StartMenu extends StatelessWidget {
   final VoidCallback onPlay;
@@ -59,24 +60,6 @@ class StartMenu extends StatelessWidget {
       width: 300,
       height: 70,
       fontSize: 40,
-    );
-  }
-}
-
-class PixelContainer extends StatelessWidget {
-  final Widget child;
-  final Color backgroundColor;
-
-  const PixelContainer({Key? key, required this.child, this.backgroundColor = Colors.blueAccent}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: child,
     );
   }
 }

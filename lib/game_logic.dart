@@ -127,15 +127,13 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
       builder: (context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15), // Gentle rounding of corners
           ),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.blueAccent[200],
-              border: Border.all(
-                color: Colors.black,
-                width: 5.0,
-              ),
+              borderRadius: BorderRadius.circular(15), // Gentle rounding of corners
+              // Removed the black border
             ),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
