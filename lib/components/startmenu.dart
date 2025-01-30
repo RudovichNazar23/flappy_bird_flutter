@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StartMenu extends StatefulWidget {
   final void Function(double, double, String) onPlay;
@@ -12,10 +13,9 @@ class StartMenu extends StatefulWidget {
 class _StartMenuState extends State<StartMenu> {
   final TextEditingController _nicknameController = TextEditingController();
 
-  // Stałe wymiary dla przycisków
-  static const double buttonWidth = 200.0;
-  static const double buttonHeight = 60.0;
-  static const double buttonFontSize = 32.0;
+  static const double buttonWidth = 300.0;
+  static const double buttonHeight = 70.0;
+  static const double buttonFontSize = 40.0;
 
   @override
   void dispose() {
@@ -75,15 +75,15 @@ class _StartMenuState extends State<StartMenu> {
 
   Widget _buildGameTitle() {
     return PixelContainer(
-      child: const Padding(
-        padding: EdgeInsets.all(20.0),
+      backgroundColor: const Color(0xFF123d8c),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Text(
           'Flappy Bird',
-          style: TextStyle(
-            fontSize: 54,
-            fontFamily: 'PixelFont',
+          style: GoogleFonts.inter(
+            fontSize: 60,
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w800,
           ),
         ),
       ),
@@ -91,32 +91,30 @@ class _StartMenuState extends State<StartMenu> {
   }
 
   Widget _buildNicknameInput() {
-    return PixelContainer(
-      child: SizedBox(
-        width: 300,
-        child: TextField(
-          controller: _nicknameController,
-          decoration: InputDecoration(
-            hintText: 'Enter your nickname',
-            hintStyle: const TextStyle(
-              fontFamily: 'PixelFont',
-              color: Colors.grey,
-              fontSize: 20,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Colors.black, width: 3),
-            ),
-            filled: true,
-            fillColor: Colors.white,
-          ),
-          style: const TextStyle(
-            fontSize: 20,
-            fontFamily: 'PixelFont',
+    return SizedBox(
+      width: 300,
+      child: TextField(
+        controller: _nicknameController,
+        decoration: InputDecoration(
+          hintText: 'Enter your nickname',
+          hintStyle: GoogleFonts.inter(
             color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w900,
           ),
-          textAlign: TextAlign.center,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: const Color(0xFFB8FFF1),
         ),
+        style: GoogleFonts.inter(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w900,
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -166,32 +164,23 @@ class _StartMenuState extends State<StartMenu> {
 
 class PixelContainer extends StatelessWidget {
   final Widget child;
+  final Color backgroundColor;
 
-  const PixelContainer({Key? key, required this.child}) : super(key: key);
+  const PixelContainer({Key? key, required this.child, this.backgroundColor = Colors.blueAccent}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.blueAccent[200],
-        border: Border.all(
-          color: Colors.black,
-          width: 5.0,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.6),
-            offset: const Offset(6, 6),
-            blurRadius: 0,
-          ),
-        ],
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(15),
       ),
       child: child,
     );
   }
 }
 
-class PixelButton extends StatefulWidget {
+class PixelButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final double width;
@@ -208,58 +197,24 @@ class PixelButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<PixelButton> createState() => _PixelButtonState();
-}
-
-class _PixelButtonState extends State<PixelButton> {
-  bool _isHovered = false;
-  bool _isPressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
-        onTap: widget.onPressed,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeInOut,
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            color: _isPressed
-                ? Colors.purple[900]
-                : _isHovered
-                ? Colors.purple[700]
-                : Colors.purple,
-            border: Border.all(
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1be2bc),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.inter(
+              fontSize: fontSize,
               color: Colors.black,
-              width: 5.0,
-            ),
-            boxShadow: _isPressed
-                ? []
-                : [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.6),
-                offset: const Offset(6, 6),
-                blurRadius: 0,
-              ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              widget.text,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: widget.fontSize,
-                fontFamily: 'PixelFont',
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+              fontWeight: FontWeight.w900,
             ),
           ),
         ),
