@@ -1,19 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'dart:io';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutterbird/components/bird.dart';
-import 'package:flutterbird/components/score.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'components/background.dart';
+import 'components/bird.dart';
 import 'components/ground.dart';
-import 'components/pipe.dart';
+import 'components/item_manager.dart';
 import 'components/pipe_manager.dart';
 import 'constants.dart';
 import 'main.dart';
 import 'components/startmenu.dart';
 import 'components/timer_text.dart'; // Import TimerText
-import 'components/stars.dart' show Stars;
 import 'components/item_manager.dart' show ItemManager;
+import 'components/pipe.dart';
+import 'components/score.dart';
+import 'components/timer_text.dart';
 import 'constants.dart';
 import 'main.dart';
 
@@ -22,7 +25,6 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   final String playerName;
   late Bird bird;
   late Background background;
-  late Stars stars;
   late Ground ground;
   late PipeManager pipeManager;
   late ScoreText scoreText;
@@ -45,9 +47,6 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     background = Background(size);
     add(background);
 
-    stars = Stars(size);
-    add(stars);
-
     bird = Bird();
     add(bird);
 
@@ -69,6 +68,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     scoreText = ScoreText(playerName: playerName);
     add(scoreText);
 
+    // Timer Text
     timerText = TimerText();
     add(timerText);
   }
@@ -78,7 +78,6 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     super.update(dt);
 
     if (!isGameOver) {
-
       if (remainingTime > 0) {
         remainingTime -= dt;
         timeSurvived += dt;
@@ -119,7 +118,6 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     isGameOver = true;
     pauseEngine();
 
-
     String dialogTitle = remainingTime <= 0 && timeSurvived >= 60.0 ? 'Congratulations!' : 'Game Over';
     String dialogMessage = remainingTime <= 0 && timeSurvived >= 60.0
         ? 'You completed the game!'
@@ -133,54 +131,109 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          child: PixelContainer(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Game Over',
-                  style: const TextStyle(
-                    fontSize: 48,
-                    fontFamily: "PixelFont",
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFF9FBF2),
-                  ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blueAccent[200],
+              border: Border.all(
+                color: Colors.black,
+                width: 5.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.6),
+                  offset: const Offset(6, 6),
+                  blurRadius: 0,
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  dialogMessage,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'PixelFont',
-                    fontSize: 32,
-                    color: Color(0xFFE9C46A),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                PixelButton(
-                  text: 'Restart',
-                  onPressed: () {
-                    Navigator.pop(context);
-                    resetGame();
-                  },
-                ),
-                const SizedBox(height: 10),
-                PixelButton(
-                  text: 'Game Menu',
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const MyApp()),
-                    );
-                  },
-                ),
-                const SizedBox(height: 10),
               ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    dialogTitle,
+                    style: const TextStyle(
+                      fontSize: 48,
+                      fontFamily: "PixelFont",
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFF9FBF2),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    dialogMessage,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: 'PixelFont',
+                      fontSize: 32,
+                      color: Color(0xFFE9C46A),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildGameOverButton(
+                    text: 'Restart',
+                    onPressed: () {
+                      Navigator.pop(context);
+                      resetGame();
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  _buildGameOverButton(
+                    text: 'Game Menu',
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MyApp()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildGameOverButton({required String text, required VoidCallback onPressed}) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onPressed,
+        child: Container(
+          width: 200,
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.purple,
+            border: Border.all(
+              color: Colors.black,
+              width: 5.0,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.6),
+                offset: const Offset(6, 6),
+                blurRadius: 0,
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 32,
+                fontFamily: 'PixelFont',
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
