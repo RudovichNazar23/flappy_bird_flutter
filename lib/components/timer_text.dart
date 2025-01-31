@@ -1,4 +1,3 @@
-// timer_text.dart
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import '../game_logic.dart';
