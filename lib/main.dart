@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flame/game.dart';
 import 'game_logic.dart';
-import 'constants.dart';
 import 'components/startmenu.dart';
 import 'components/difficulty_selection.dart';
 import 'components/nickname_input.dart';
+import 'splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +24,7 @@ class MyAppState extends State<MyApp> {
   double _groundSpeed = 100;
   double _pipeSpawnDistance = 250;
   String _playerName = "";
-  int _currentScreen = 0; // 0 - StartMenu, 1 - DifficultySelection, 2 - NicknameInput
+  int _currentScreen = -1;
 
   void _startGame() {
     setState(() {
@@ -36,32 +36,32 @@ class MyAppState extends State<MyApp> {
     setState(() {
       _groundSpeed = speed;
       _pipeSpawnDistance = pipeSpawnDistance;
-      _currentScreen = 2; // Przejdź do ekranu wpisywania nicku
+      _currentScreen = 2;
     });
   }
 
   void _setPlayerName(String name) {
     setState(() {
       _playerName = name;
-      _startGame(); // Rozpocznij grę po ustawieniu nicku
+      _startGame();
     });
   }
 
   void _navigateToDifficultySelection() {
     setState(() {
-      _currentScreen = 1; // Przejdź do ekranu wyboru poziomu trudności
+      _currentScreen = 1;
     });
   }
 
   void _navigateToStartMenu() {
     setState(() {
-      _currentScreen = 0; // Przejdź do ekranu startowego
+      _currentScreen = 0;
     });
   }
 
   void _navigateToNicknameInput() {
     setState(() {
-      _currentScreen = 2; // Przejdź do ekranu wpisywania nicku
+      _currentScreen = 2;
     });
   }
 
@@ -69,17 +69,18 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Widget screen;
 
+
     switch (_currentScreen) {
       case 1:
         screen = DifficultySelection(
           onSetDifficulty: _setDifficulty,
-          onBack: _navigateToStartMenu, // Dodano brakujący parametr
+          onBack: _navigateToStartMenu,
         );
         break;
       case 2:
         screen = NicknameInput(
           onSetPlayerName: _setPlayerName,
-          onBack: _navigateToDifficultySelection, // Dodano brakujący parametr
+          onBack: _navigateToDifficultySelection,
         );
         break;
       default:
@@ -88,7 +89,17 @@ class MyAppState extends State<MyApp> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: _isPlaying
+      home: _currentScreen == -1
+          ? Scaffold(
+        body: SplashScreen(
+          onFinish: () {
+            setState(() {
+              _currentScreen = 0;
+            });
+          },
+        ),
+      )
+          : _isPlaying
           ? GameWidget(
         game: FlutterBird(
           playerName: _playerName,
