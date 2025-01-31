@@ -37,7 +37,7 @@ class _PixelButtonState extends State<PixelButton> {
           width: widget.width,
           height: widget.height,
           decoration: BoxDecoration(
-            color: _isHovered ? const Color(0xFF17c6a6) : const Color(0xFF1be2bc),
+            color: _isHovered ? const Color(0xFF79F1DE) : const Color(0xFF1be2bc),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Center(

@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flame/game.dart';
 import 'dart:io';
 import 'pixel_button.dart';
-import 'background_scaffold.dart';
-import 'pixel_container.dart'; // Zaktualizowany import
+import 'pixel_container.dart';
+import 'menu_background.dart';
+
+class MenuGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    add(MenuBackground(
+      canvasSize,
+      mountainsHeightRatio: 0.3,
+      starsHeightRatio: 0.5,
+    ));
+  }
+}
 
 class StartMenu extends StatelessWidget {
   final VoidCallback onPlay;
@@ -12,17 +25,29 @@ class StartMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundScaffold(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildGameTitle(),
-          const SizedBox(height: 30),
-          _buildPlayButton(),
-          const SizedBox(height: 20),
-          _buildExitButton(),
-        ],
-      ),
+    return Stack(
+      children: [
+        SizedBox.expand(
+          child: GameWidget(
+            game: MenuGame(),
+          ),
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildGameTitle(),
+                const SizedBox(height: 30),
+                _buildPlayButton(),
+                const SizedBox(height: 20),
+                _buildExitButton(),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
