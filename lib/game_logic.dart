@@ -92,7 +92,6 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
     if (!isGameOver) {
       timeSurvived += dt;
-
       pipeManager.pipes.forEach((pipe) {
         if (!pipe.passed && !pipe.isTopPipe && bird.position.x > pipe.position.x) {
           pipe.passed = true;
@@ -241,6 +240,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     bird.velocity = 0;
 
     score = 0;
+    scoreText.updateScore(score);
     remainingTime = 60.0;
     timeSurvived = 0.0;
     isGameOver = false;
