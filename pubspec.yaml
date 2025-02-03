@@ -1,5 +1,5 @@
-name: flutterbird
-description: "A new Flutter project."
+name: galacticglide
+description: "Galactic Glide: The Kaliop Chronicles - An exciting space adventure."
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -30,8 +30,6 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/images/KaliopLogo.png
-    - assets/images/astronaut.png
 
   fonts:
     - family: PixelFont

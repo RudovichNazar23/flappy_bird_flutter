@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flame/components.dart';
-import 'package:flutterbird/constants.dart';
-import 'package:flutterbird/game_logic.dart';
+import 'package:galacticglide/constants.dart';
+import 'package:galacticglide/game_logic.dart';
 import 'pipe.dart';
 
 class PipeManager extends Component with HasGameRef<FlutterBird> {

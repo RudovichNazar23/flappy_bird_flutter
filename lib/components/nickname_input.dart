@@ -3,17 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flame/game.dart';
 import 'pixel_button.dart';
 import 'pixel_container.dart';
-import 'menu_background.dart';
+import 'background.dart';
 
 class MenuGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    add(MenuBackground(
-      canvasSize,
-      mountainsHeightRatio: 0.3,
-      starsHeightRatio: 0.5,
-    ));
+    add(Background(canvasSize));
   }
 }
 
@@ -21,7 +17,11 @@ class NicknameInput extends StatefulWidget {
   final void Function(String) onSetPlayerName;
   final VoidCallback onBack;
 
-  const NicknameInput({required this.onSetPlayerName, required this.onBack, Key? key}) : super(key: key);
+  const NicknameInput({
+    required this.onSetPlayerName,
+    required this.onBack,
+    Key? key
+  }) : super(key: key);
 
   @override
   State<NicknameInput> createState() => _NicknameInputState();
@@ -88,10 +88,17 @@ class _NicknameInputState extends State<NicknameInput> {
               ),
             ),
             Positioned(
-              left: constraints.maxWidth / 2 - 270,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Color(0xFF1be2bc)),
-                onPressed: widget.onBack,
+              left: constraints.maxWidth / 2 - 275, // Przesunięte o 5px w lewo
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: widget.onBack,
+                  child: Image.asset(
+                    'assets/images/arrow.png',
+                    width: 40, // Zmniejszone z 48 na 40
+                    height: 40, // Zmniejszone z 48 na 40
+                  ),
+                ),
               ),
             ),
           ],
@@ -116,7 +123,7 @@ class _NicknameInputState extends State<NicknameInput> {
       child: TextField(
         controller: _nicknameController,
         decoration: InputDecoration(
-          hintText: 'Enter your nickname',
+          hintText: 'Podaj swój nick',
           hintStyle: GoogleFonts.inter(
             color: Colors.black54,
             fontSize: 20,
