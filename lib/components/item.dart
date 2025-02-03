@@ -8,7 +8,7 @@ import '../constants.dart';
 class Item extends SpriteComponent with CollisionCallbacks, HasGameRef<FlutterBird> {
   final String imageName;
   Vector2 _lastSize = Vector2.zero();
-  final double _distanceFromGround; // Zapisujemy odległość od ziemi zamiast ratio
+  final double _distanceFromGround;
 
   Item(Vector2 position, Vector2 size, this.imageName, {int priority = 1})
       : _distanceFromGround = position.y - (position.y + size.y),
@@ -37,7 +37,7 @@ class Item extends SpriteComponent with CollisionCallbacks, HasGameRef<FlutterBi
   @override
   void handleResize(Vector2 newSize) {
     super.handleResize(newSize);
-    // Zachowujemy stałą odległość od ziemi
+
     position.y = newSize.y - groundHeight + _distanceFromGround;
   }
 }

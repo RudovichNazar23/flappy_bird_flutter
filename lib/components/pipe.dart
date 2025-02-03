@@ -6,7 +6,7 @@ import '../constants.dart';
 
 class Pipe extends SpriteComponent with CollisionCallbacks, HasGameRef<FlutterBird> {
   final bool isTopPipe;
-  bool scored = false;
+  bool _passed = false;
 
   Pipe(Vector2 position, Vector2 size, {required this.isTopPipe})
       : super(position: position, size: size);
@@ -20,7 +20,6 @@ class Pipe extends SpriteComponent with CollisionCallbacks, HasGameRef<FlutterBi
   @override
   void onGameResize(Vector2 newSize) {
     super.onGameResize(newSize);
-    // Dostosuj pozycję rury do nowego rozmiaru ekranu
     if (!isTopPipe) {
       position.y = newSize.y - groundHeight - size.y;
     }
@@ -30,14 +29,18 @@ class Pipe extends SpriteComponent with CollisionCallbacks, HasGameRef<FlutterBi
   void update(double dt) {
     position.x -= gameRef.groundSpeed * dt;
 
-    if (!scored && !isTopPipe && position.x + size.x < gameRef.bird.position.x) {
-      scored = true;
+
+    if (!_passed && !isTopPipe && position.x + size.x < gameRef.bird.position.x) {
+      _passed = true;
       gameRef.incrementScore();
     }
 
-    // Usuń rurę tylko jeśli jest całkowicie poza ekranem
+
     if (position.x + size.x < 0) {
       removeFromParent();
     }
   }
+
+  bool get passed => _passed;  // Getter dla passed
+  set passed(bool value) => _passed = value;  // Setter dla passed
 }

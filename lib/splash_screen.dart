@@ -7,7 +7,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Simulate a delay for the splash screen
+
     Future.delayed(Duration(seconds: 3), onFinish);
 
     return Scaffold(
@@ -16,11 +16,11 @@ class SplashScreen extends StatelessWidget {
           Positioned.fill(
             child: Image.asset(
               'assets/images/mountains.png',
-              fit: BoxFit.cover, // Ensure the image covers the entire screen
+              fit: BoxFit.cover,
             ),
           ),
           Center(
-            child: Image.asset('assets/images/KaliopLogo.png'), // Your logo image
+            child: Image.asset('assets/images/KaliopLogo.png'),
           ),
         ],
       ),

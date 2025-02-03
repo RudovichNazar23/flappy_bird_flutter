@@ -115,7 +115,7 @@ class MyAppState extends State<MyApp> {
   double _groundSpeed = 100;
   double _pipeSpawnDistance = 250;
   String _playerName = "";
-  int _currentScreen = -1;  // Zmieniono inicjalizację na -1
+  int _currentScreen = -1;
   FlutterBird? _game;
   ScoreText? _scoreText;
   final ValueNotifier<bool> _resetTrigger = ValueNotifier<bool>(false);
@@ -220,7 +220,7 @@ class MyAppState extends State<MyApp> {
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
       ),
-      home: _currentScreen == -1  // Dodano logikę splash screen
+      home: _currentScreen == -1
           ? Scaffold(
         body: SplashScreen(
           onFinish: () {

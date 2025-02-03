@@ -10,8 +10,8 @@ class MenuBackground extends Component {
   Vector2 size;
   final double mountainsHeightRatio;
   final double starsHeightRatio;
-  final double pipeWidth = 100.0; // Szerokość rury
-  final double gapHeight = 200.0; // Wysokość przerwy między rurami
+  final double pipeWidth = 100.0;
+  final double gapHeight = 200.0;
 
   MenuBackground(
       this.size, {
@@ -53,16 +53,16 @@ class MenuBackground extends Component {
       print('Error loading green_stars.png: $e');
     }
 
-    // Dodawanie rur
+
     try {
-      // Górna rura
+
       topPipe.sprite = await Sprite.load('pipe-top.png');
       double centerX = size.x / 2 - pipeWidth / 2;
       topPipe.position = Vector2(centerX, 0);
       topPipe.size = Vector2(pipeWidth, size.y / 2 - gapHeight / 2);
       add(topPipe);
 
-      // Dolna rura
+
       bottomPipe.sprite = await Sprite.load('pipe-bottom.png');
       bottomPipe.position = Vector2(centerX, size.y / 2 + gapHeight / 2);
       bottomPipe.size = Vector2(pipeWidth, size.y / 2 - gapHeight / 2);
@@ -92,7 +92,7 @@ class MenuBackground extends Component {
       stars.position = Vector2.zero();
     }
 
-    // Aktualizacja pozycji i rozmiaru rur
+
     if (topPipe.sprite != null && bottomPipe.sprite != null) {
       double centerX = newSize.x / 2 - pipeWidth / 2;
 
