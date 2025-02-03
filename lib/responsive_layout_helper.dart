@@ -11,11 +11,11 @@ class ResponsiveLayoutHelper {
     final aspectRatio = size.width / size.height;
 
     if (aspectRatio > 16/9) {
-      // Szeroki ekran
+
       final height = size.height;
       return Size(height * (16/9), height);
     } else {
-      // Wąski ekran
+
       final width = size.width;
       return Size(width, width * (9/16));
     }

@@ -28,7 +28,7 @@ class TimerText extends TextComponent with HasGameRef<FlutterBird> {
   void update(double dt) {
     super.update(dt);
 
-    // Sprawdź zmianę rozmiaru
+
     if (_lastSize.x != gameRef.size.x || _lastSize.y != gameRef.size.y) {
       _updatePosition(gameRef.size);
       _lastSize = gameRef.size.clone();

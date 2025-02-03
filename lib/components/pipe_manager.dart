@@ -7,13 +7,15 @@ import 'pipe.dart';
 class PipeManager extends Component with HasGameRef<FlutterBird> {
   double pipeSpawnTimer = 0;
   Vector2 _lastSize = Vector2.zero();
-  final List<Pipe> activePipes = [];
+  final List<Pipe> _activePipes = [];
+
+  List<Pipe> get pipes => _activePipes;
 
   @override
   void update(double dt) {
     super.update(dt);
 
-    // Sprawdź zmianę rozmiaru tylko jeśli faktycznie się zmieniła
+
     if (_lastSize.x != gameRef.size.x || _lastSize.y != gameRef.size.y) {
       _handleResizeChange();
       _lastSize = gameRef.size.clone();
@@ -29,7 +31,7 @@ class PipeManager extends Component with HasGameRef<FlutterBird> {
   }
 
   void _cleanupInactivePipes() {
-    activePipes.removeWhere((pipe) {
+    _activePipes.removeWhere((pipe) {
       if (pipe.position.x + pipe.size.x < 0) {
         pipe.removeFromParent();
         return true;
@@ -42,11 +44,11 @@ class PipeManager extends Component with HasGameRef<FlutterBird> {
     final double screenHeight = gameRef.size.y;
     final double availableHeight = screenHeight - groundHeight - PipeGap;
 
-    // Usuń wszystkie rury i zresetuj timer przy zmianie rozmiaru
-    for (var pipe in activePipes) {
+
+    for (var pipe in _activePipes) {
       pipe.removeFromParent();
     }
-    activePipes.clear();
+    _activePipes.clear();
     pipeSpawnTimer = 0;
   }
 
@@ -56,10 +58,10 @@ class PipeManager extends Component with HasGameRef<FlutterBird> {
     final double bottomPipeHeight = minPipeHeight + Random().nextDouble() * (maxPipeHeight - minPipeHeight);
     final double topPipeHeight = screenHeight - groundHeight - bottomPipeHeight - PipeGap;
 
-    // Sprawdź czy jest wystarczająco miejsca
+
     if (screenHeight - groundHeight - PipeGap <= 2 * minPipeHeight) return;
 
-    // Dodatkowe sprawdzenie bezpieczeństwa
+
     if (bottomPipeHeight < minPipeHeight || topPipeHeight < minPipeHeight) return;
 
     final double spawnX = gameRef.size.x + pipeWidth;
@@ -76,11 +78,11 @@ class PipeManager extends Component with HasGameRef<FlutterBird> {
       isTopPipe: true,
     );
 
-    // Dodaj do listy aktywnych rur
-    activePipes.add(topPipe);
-    activePipes.add(bottomPipe);
 
-    // Dodaj do gry
+    _activePipes.add(topPipe);
+    _activePipes.add(bottomPipe);
+
+
     gameRef.add(bottomPipe);
     gameRef.add(topPipe);
   }
@@ -93,7 +95,11 @@ class PipeManager extends Component with HasGameRef<FlutterBird> {
 
   @override
   void onRemove() {
-    activePipes.clear();
+    _activePipes.clear();
     super.onRemove();
+  }
+
+  void reset() {
+    _activePipes.clear();
   }
 }

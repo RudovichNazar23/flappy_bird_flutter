@@ -19,7 +19,7 @@ class ItemManager extends Component with HasGameRef<FlutterBird> {
 
   final double minItemHeight = 25.0;
   final double maxItemHeight = 75.0;
-  final double aspectRatio = 0.8; // Proporcja szerokości do wysokości (możesz dostosować)
+  final double aspectRatio = 0.8;
 
   ItemManager(this.imageName);
 
@@ -76,7 +76,7 @@ class ItemManager extends Component with HasGameRef<FlutterBird> {
     final double screenHeight = gameRef.size.y;
 
     final double itemHeight = minItemHeight + _random.nextDouble() * (maxItemHeight - minItemHeight);
-    final double itemWidth = itemHeight * aspectRatio; // Szerokość proporcjonalna do wysokości
+    final double itemWidth = itemHeight * aspectRatio;
 
     final double maxYOffset = 15.0;
     final double randomYOffset = _random.nextDouble() * maxYOffset;
@@ -87,7 +87,7 @@ class ItemManager extends Component with HasGameRef<FlutterBird> {
 
     final item = Item(
       Vector2(baseX + randomOffset, itemY),
-      Vector2(itemWidth, itemHeight), // Szerokość proporcjonalna do wysokości
+      Vector2(itemWidth, itemHeight),
       imageName,
     );
 

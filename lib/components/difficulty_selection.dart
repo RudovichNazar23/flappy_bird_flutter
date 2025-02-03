@@ -59,7 +59,7 @@ class DifficultySelection extends StatelessWidget {
         return Stack(
           alignment: Alignment.center,
           children: [
-            // Centrowany container z tekstem
+
             Center(
               child: PixelContainer(
                 backgroundColor: const Color(0xFF123d8c),
@@ -77,9 +77,9 @@ class DifficultySelection extends StatelessWidget {
                 ),
               ),
             ),
-            // Strzałka powrotu obok buttona
+
             Positioned(
-              left: constraints.maxWidth / 2 - 230, // Dostosuj tę wartość by zmienić odległość
+              left: constraints.maxWidth / 2 - 230,
               child: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Color(0xFF1be2bc)),
                 onPressed: onBack,

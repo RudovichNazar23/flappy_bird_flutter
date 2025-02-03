@@ -3,17 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:flame/game.dart';
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
+import 'components/score.dart';
 import 'game_logic.dart';
 import 'constants.dart';
 import 'components/startmenu.dart';
 import 'components/difficulty_selection.dart';
 import 'components/nickname_input.dart';
+import 'splash_screen.dart';
+
 
 void main() {
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -113,8 +115,9 @@ class MyAppState extends State<MyApp> {
   double _groundSpeed = 100;
   double _pipeSpawnDistance = 250;
   String _playerName = "";
-  int _currentScreen = 0;
+  int _currentScreen = -1;
   FlutterBird? _game;
+  ScoreText? _scoreText;
   final ValueNotifier<bool> _resetTrigger = ValueNotifier<bool>(false);
   final ValueNotifier<bool> _stopTrigger = ValueNotifier<bool>(false);
 
@@ -136,6 +139,8 @@ class MyAppState extends State<MyApp> {
         onRestart: _handleGameRestart,
         onGameOver: _handleGameOver,
       );
+      _scoreText = ScoreText(playerName: _playerName);
+      _game!.add(_scoreText!);
     });
   }
 
@@ -150,6 +155,10 @@ class MyAppState extends State<MyApp> {
 
   void _updateGameTime(int timeLeft) {
     _game?.updateRemainingTime(timeLeft.toDouble());
+  }
+
+  void _updateScore(int score) {
+    _scoreText?.updateScore(score);
   }
 
   void _setDifficulty(double speed, double pipeSpawnDistance) {
@@ -211,7 +220,17 @@ class MyAppState extends State<MyApp> {
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
       ),
-      home: _isPlaying
+      home: _currentScreen == -1
+          ? Scaffold(
+        body: SplashScreen(
+          onFinish: () {
+            setState(() {
+              _currentScreen = 0;
+            });
+          },
+        ),
+      )
+          : _isPlaying
           ? Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF0d1b39),
@@ -256,4 +275,3 @@ class MyAppState extends State<MyApp> {
     );
   }
 }
-

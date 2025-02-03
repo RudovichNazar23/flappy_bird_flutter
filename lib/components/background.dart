@@ -19,7 +19,7 @@ class Background extends Component {
   Future<void> onLoad() async {
     print('Starting to load background assets...');
 
-    // Niebieskie tło
+
     final backgroundComponent = RectangleComponent(
       position: Vector2.zero(),
       size: size,
@@ -56,20 +56,19 @@ class Background extends Component {
   void onGameResize(Vector2 newSize) {
     size = newSize;
 
-    // Aktualizacja niebieskiego tła
+
     final backgroundRect = children.whereType<RectangleComponent>().firstOrNull;
     if (backgroundRect != null) {
       backgroundRect.size = newSize;
     }
 
-    // Aktualizacja pozycji i rozmiaru gór
+
     if (mountains.sprite != null) {
       mountains
         ..size = Vector2(newSize.x, newSize.y * MOUNTAINS_HEIGHT_RATIO)
         ..position = Vector2(0, newSize.y * (1 - MOUNTAINS_HEIGHT_RATIO) - groundHeight);
     }
 
-    // Aktualizacja pozycji i rozmiaru gwiazd
     if (stars.sprite != null) {
       stars
         ..size = Vector2(newSize.x, newSize.y * STARS_HEIGHT_RATIO)

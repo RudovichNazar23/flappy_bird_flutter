@@ -11,6 +11,7 @@ import 'components/ground.dart';
 import 'components/item_manager.dart';
 import 'components/pipe_manager.dart';
 import 'components/pipe.dart';
+import 'components/score.dart';
 import 'constants.dart';
 import 'main.dart';
 
@@ -25,6 +26,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
   late ItemManager rock;
   late ItemManager bush;
   late ItemManager grass;
+  late ScoreText scoreText;
   final double groundSpeed;
   final double pipeSpawnDistance;
 
@@ -79,6 +81,9 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
     pipeManager = PipeManager();
     add(pipeManager);
+
+    scoreText = ScoreText(playerName: playerName);
+    add(scoreText);
   }
 
   @override
@@ -87,6 +92,13 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
     if (!isGameOver) {
       timeSurvived += dt;
+
+      pipeManager.pipes.forEach((pipe) {
+        if (!pipe.passed && !pipe.isTopPipe && bird.position.x > pipe.position.x) {
+          pipe.passed = true;
+          incrementScore();
+        }
+      });
     }
   }
 
@@ -108,6 +120,7 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
 
   void incrementScore() {
     score += 1;
+    scoreText.updateScore(score);
   }
 
   void gameOver() {
@@ -232,10 +245,10 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     timeSurvived = 0.0;
     isGameOver = false;
 
+    pipeManager.reset();
     children.whereType<Pipe>().forEach((pipe) => pipe.removeFromParent());
 
     onRestart?.call();
     resumeEngine();
   }
 }
-
