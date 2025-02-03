@@ -1,8 +1,8 @@
 // item_manager.dart
 import 'dart:math';
 import 'package:flame/components.dart';
-import 'package:flutterbird/constants.dart';
-import 'package:flutterbird/game_logic.dart';
+import 'package:galacticglide/constants.dart';
+import 'package:galacticglide/game_logic.dart';
 import 'item.dart';
 
 class ItemManager extends Component with HasGameRef<FlutterBird> {

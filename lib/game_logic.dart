@@ -130,10 +130,10 @@ class FlutterBird extends FlameGame with TapDetector, HasCollisionDetection, Key
     onGameOver?.call();
 
     bool hasWon = remainingTime <= 0 && timeSurvived >= 60.0;
-    String dialogTitle = hasWon ? 'Congratulations!' : 'Game Over';
+    String dialogTitle = hasWon ? 'Gratulacje!' : 'Game Over';
     String dialogMessage = hasWon
-        ? 'Congratulations ${playerName}!\nYou survived for ${_formatTime(timeSurvived)}!'
-        : 'Player: $playerName\nScore: $score\nTime: ${_formatTime(timeSurvived)}';
+        ? 'Gratulacje ${playerName}!\nTwój lot wynosił ${_formatTime(timeSurvived)}!'
+        : 'Nazwa gracza: $playerName\nWynik: $score\nCzas lotu: ${_formatTime(timeSurvived)}';
 
     showDialog(
       context: buildContext!,

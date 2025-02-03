@@ -1,6 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutterbird/game_logic.dart';
+import 'package:galacticglide/game_logic.dart';
 import 'dart:async';
 import '../constants.dart';
 

@@ -19,7 +19,6 @@ class Background extends Component {
   Future<void> onLoad() async {
     print('Starting to load background assets...');
 
-
     final backgroundComponent = RectangleComponent(
       position: Vector2.zero(),
       size: size,
@@ -56,12 +55,10 @@ class Background extends Component {
   void onGameResize(Vector2 newSize) {
     size = newSize;
 
-
     final backgroundRect = children.whereType<RectangleComponent>().firstOrNull;
     if (backgroundRect != null) {
       backgroundRect.size = newSize;
     }
-
 
     if (mountains.sprite != null) {
       mountains

@@ -3,17 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flame/game.dart';
 import 'pixel_button.dart';
 import 'pixel_container.dart';
-import 'menu_background.dart';
+import 'background.dart';
 
 class MenuGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    add(MenuBackground(
-      canvasSize,
-      mountainsHeightRatio: 0.3,
-      starsHeightRatio: 0.5,
-    ));
+    add(Background(canvasSize));
   }
 }
 
@@ -21,7 +17,11 @@ class DifficultySelection extends StatelessWidget {
   final void Function(double, double) onSetDifficulty;
   final VoidCallback onBack;
 
-  const DifficultySelection({required this.onSetDifficulty, required this.onBack, Key? key}) : super(key: key);
+  const DifficultySelection({
+    required this.onSetDifficulty,
+    required this.onBack,
+    Key? key
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,6 @@ class DifficultySelection extends StatelessWidget {
         return Stack(
           alignment: Alignment.center,
           children: [
-
             Center(
               child: PixelContainer(
                 backgroundColor: const Color(0xFF123d8c),
@@ -77,12 +76,18 @@ class DifficultySelection extends StatelessWidget {
                 ),
               ),
             ),
-
             Positioned(
-              left: constraints.maxWidth / 2 - 230,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Color(0xFF1be2bc)),
-                onPressed: onBack,
+              left: constraints.maxWidth / 2 - 235, // Przesunięte o 5px w lewo
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: onBack,
+                  child: Image.asset(
+                    'assets/images/arrow.png',
+                    width: 40, // Zmniejszone z 48 na 40
+                    height: 40, // Zmniejszone z 48 na 40
+                  ),
+                ),
               ),
             ),
           ],

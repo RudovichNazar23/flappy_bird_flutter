@@ -57,9 +57,10 @@ class StartMenu extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Text(
-          'Flappy Bird',
+          'Galactic Glide',
+          textAlign: TextAlign.center,
           style: GoogleFonts.inter(
-            fontSize: 60,
+            fontSize: 45,
             color: Colors.white,
             fontWeight: FontWeight.w800,
           ),
